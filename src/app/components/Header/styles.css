@@ -1,0 +1,20 @@
+
+.header__nav {
+  padding: 0 50px;
+  height: 60px;
+}
+
+.header__nav ul li,
+.header__nav ul li a {
+  color: white;
+}
+
+.greeting {
+  line-height: 60px;
+}
+
+.logout {
+  line-height: 60px;
+  padding: 0;
+  cursor: pointer;
+}

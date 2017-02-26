@@ -1,0 +1,24 @@
+{
+  "app": {
+    "host": "localhost",
+    "port": 3000
+  },
+  "db": {
+    "dialect": "mongodb",
+    "host": "localhost",
+    "port": 27017,
+    "database": "Turbulence",
+    "username": "admin",
+    "password": "password"
+  },
+  "jwt": {
+    "secret": "SOME AMAZING SECRET",
+    "expires_seconds": 1400
+  },
+  "api": {
+    "BaseUrl": "/api/v1",
+    "UserEndpoint": "/user",
+    "AuthenticateUser": "/user/authenticate",
+    "ReAuthenticateUser": "/user/reauthenticate"
+  }
+}

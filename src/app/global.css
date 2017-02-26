@@ -1,0 +1,21 @@
+
+body {
+  min-height: 1rem;
+  padding-top: 60px;
+  font-family: 'ClanPro-Book', 'Helvetica Neue', Helvetica, serif;
+}
+
+main {
+  margin-top: 40px;
+}
+
+button {
+  font-family: 'ClanPro-Book', 'Helvetica Neue', Helvetica, serif;
+}
+
+@font-face {
+  font-family: 'ClanPro-Book';
+  src: url('../assets/fonts/ClanPro/ClanPro-Book.otf');
+  font-weight: normal;
+  font-style: normal;
+}
