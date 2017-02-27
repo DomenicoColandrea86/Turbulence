@@ -11,6 +11,8 @@ const UserSchema = new Schema({
   password: { type: String, required: true, select: false },
   create_dt: Date,
   modified_dt: Date,
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
 });
 
 UserSchema.pre('save', function save(next) {

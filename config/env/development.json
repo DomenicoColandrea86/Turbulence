@@ -20,5 +20,13 @@
     "UserEndpoint": "/user",
     "AuthenticateUser": "/user/authenticate",
     "ReAuthenticateUser": "/user/reauthenticate"
+  },
+  "mailer": {
+    "sendGrid": {
+      "api_key": "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"
+    },
+    "emailFrom": "passwordreset@turbulence.com",
+    "emailSubject": "Turbulence Password Reset",
+    "resetTokenExpires": 3600000
   }
 }

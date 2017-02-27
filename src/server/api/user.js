@@ -1,6 +1,10 @@
 
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
+const nodemailer = require('nodemailer');
+const Promise = require('bluebird');
+const sgTransport = require('nodemailer-sendgrid-transport');
 const Models = require('../models');
 const config = require('../../../config');
 
@@ -22,8 +26,7 @@ const User = {
 
   authenticate: (req, res, next) => {
     Models.User.findOne({ email: req.body.email }, (err, user) => {
-      // if error throw error
-      if (err) throw err;
+      if (err) return next(err);
       // if user doesn't exist return 404
       if (!user) return res.status(404).json({ success: false, msg: 'Authentication failed. User not found.' });
       // check if password matches
@@ -58,6 +61,38 @@ const User = {
     // forbidden without token
     return res.status(403).send({ success: false, msg: 'Authentication failed.' });
   },
+
+  resetPassword: (req, res, next) =>
+    new Promise((resolve, reject) =>
+      Models.User.findOne({ email: req.body.email }, (err, user) => {
+        if (!user) return resolve({ success: false, msg: 'Authentication failed. No account with that email address exists.' });
+        user.resetPasswordToken = crypto.randomBytes(64).toString('hex'); // eslint-disable-line no-param-reassign
+        user.resetPasswordExpires = Date.now() + config.get('mailer:resetTokenExpires'); // eslint-disable-line no-param-reassign
+        return user.save((error) => {
+          if (error) return reject({ success: false, msg: error.message });
+          return resolve(user);
+        });
+      })).then((user) => {
+        const options = {
+          auth: {
+            api_key: config.get('mailer:sendGrid:api_key'),
+          },
+        };
+        const client = nodemailer.createTransport(sgTransport(options));
+        const email = {
+          from: config.get('mailer:emailFrom'),
+          to: user.email,
+          subject: config.get('mailer:emailSubject'),
+          text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
+          Please click on the following link, or paste this into your browser to complete the process:\n\n
+          http://${req.headers.host}/reset/${user.resetPasswordToken}\n\n
+          If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+        };
+        return client.sendMail(email, (err) => {
+          if (err) return next(err);
+          return res.status(200).json({ success: true, msg: `An e-mail has been sent to ${user.email} with further instructions.` });
+        });
+      }),
 };
 
 module.exports = User;

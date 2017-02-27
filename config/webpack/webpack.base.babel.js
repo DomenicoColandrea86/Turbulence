@@ -4,7 +4,8 @@
 
 const path = require('path');
 const webpack = require('webpack');
-// const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+process.noDeprecation = true; // see https://github.com/webpack/loader-utils/issues/56
 
 module.exports = (options) => ({
   entry: options.entry,

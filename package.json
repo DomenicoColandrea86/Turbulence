@@ -192,12 +192,13 @@
       "jsonwebtoken",
       "mongoose",
       "extract-text-webpack-plugin",
-      "nconf"
+      "nconf",
+      "nodemailer",
+      "nodemailer-sendgrid-transport"
     ],
     "include": [
       "core-js",
       "lodash",
-      "bootstrap",
       "eventsource-polyfill"
     ]
   },
@@ -250,6 +251,8 @@
     "minimist": "1.2.0",
     "mongoose": "^4.7.6",
     "nconf": "^0.8.4",
+    "nodemailer": "^3.1.4",
+    "nodemailer-sendgrid-transport": "^0.2.0",
     "react": "15.4.1",
     "react-bootstrap": "^0.30.7",
     "react-dom": "15.4.1",

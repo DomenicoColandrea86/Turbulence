@@ -11,6 +11,8 @@ const cheerio = require('cheerio');
 const pkg = require(path.resolve(process.cwd(), 'package.json'));
 const dllPlugin = pkg.dllPlugin;
 
+process.noDeprecation = true; // see https://github.com/webpack/loader-utils/issues/56
+
 const plugins = [
   new webpack.HotModuleReplacementPlugin(), // Tell webpack we want hot reloading
   new webpack.NoEmitOnErrorsPlugin(),

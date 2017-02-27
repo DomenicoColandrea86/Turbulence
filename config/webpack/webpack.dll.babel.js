@@ -13,6 +13,8 @@ const webpack = require('webpack');
 const pkg = require(join(process.cwd(), 'package.json'));
 const config = require('../../config');
 
+process.noDeprecation = true; // see https://github.com/webpack/loader-utils/issues/56
+
 if (!pkg.dllPlugin) { process.exit(0); }
 
 const dllConfig = pkg.dllPlugin;
