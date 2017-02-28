@@ -2,4 +2,4 @@
  * SignupPage constants
  */
 
-export const DEFAULT_ACTION = 'app/AuthPage/DEFAULT_ACTION';
+export const DEFAULT_ACTION = 'app/SignupPage/DEFAULT_ACTION';

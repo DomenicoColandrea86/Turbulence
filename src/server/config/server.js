@@ -5,7 +5,7 @@ const Promise = require('bluebird');
 const ip = require('ip');
 const config = require('../../../config');
 const divider = chalk.gray('\n-----------------------------------');
-mongoose.Promise = Promise; // https://github.com/Automattic/mongoose/issues/4291
+mongoose.Promise = global.Promise; // https://github.com/Automattic/mongoose/issues/4291
 
 /**
  * Turbulence Class

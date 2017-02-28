@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
 /**
- * Direct selector to the authPage state domain
+ * Direct selector to the LoginPage state domain
  */
 function selectLoginPageDomain(state) {
   return state.loginPage;
@@ -13,7 +13,7 @@ function selectLoginPageDomain(state) {
 
 
 /**
- * Public selectors used by AuthPage
+ * Public selectors used by LoginPage
  */
 export const selectLoginPage = createSelector(
   selectLoginPageDomain,

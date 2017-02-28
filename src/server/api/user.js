@@ -62,7 +62,7 @@ const User = {
     return res.status(403).send({ success: false, msg: 'Authentication failed.' });
   },
 
-  resetPassword: (req, res, next) =>
+  forgotPassword: (req, res, next) =>
     new Promise((resolve, reject) =>
       Models.User.findOne({ email: req.body.email }, (err, user) => {
         if (!user) return resolve({ success: false, msg: 'Authentication failed. No account with that email address exists.' });
@@ -93,6 +93,54 @@ const User = {
           return res.status(200).json({ success: true, msg: `An e-mail has been sent to ${user.email} with further instructions.` });
         });
       }),
+
+  authenticateResetPasswordToken: (req, res, next) => {
+    const token = req.body.token;
+    if (token) {
+      return Models.User.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } }, (err, user) => {
+        // Password reset token is invalid or has expired.
+        if (err || !user) return res.status(401).json({ success: false, msg: err });
+        // Return success
+        return res.status(200).json({ success: true });
+      });
+    }
+    // forbidden without token
+    return res.status(403).send({ success: false, msg: 'Authentication failed.' });
+  },
+
+  resetPassword: (req, res, next) => {
+    const password = req.body.password;
+    const token = req.body.token;
+
+    if (token) {
+      return Models.User.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } }, (err, user) => {
+        // Password reset token is invalid or has expired.
+        if (err || !user) return res.status(401).json({ success: false, msg: err });
+
+        // @todo, need to look into this
+        // user.update({
+        //     resetPasswordToken: token
+        //   }, {
+        //     $unset: {
+        //       resetPasswordToken: '',
+        //       resetPasswordExpires: '',
+        //     },
+        //   });
+
+        // set new password and save
+        user.password = password; // eslint-disable-line no-param-reassign
+        user.resetPasswordToken = null; // eslint-disable-line no-param-reassign
+        user.resetPasswordExpires = null; // eslint-disable-line no-param-reassign
+
+        return user.save((error) => {
+          if (error) return res.status(409).json({ success: false, msg: error.message });
+          return res.status(200).json({ success: true, msg: 'Successfully updated user.' });
+        });
+      });
+    }
+    // forbidden without token
+    return res.status(403).send({ success: false, msg: 'Authentication failed.' });
+  },
 };
 
 module.exports = User;

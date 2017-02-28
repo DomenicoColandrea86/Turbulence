@@ -75,6 +75,25 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      path: '/reset/:token',
+      name: 'resetPasswordPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          import('./containers/ResetPasswordPage/reducer'),
+          import('./containers/ResetPasswordPage/sagas'),
+          import('./containers/ResetPasswordPage'),
+        ]);
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('resetPasswordPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {

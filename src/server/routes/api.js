@@ -17,7 +17,13 @@ const apiRoutes = function apiRoutes(middleware) {
     .post(api.user.authenticate);
   router.route('/user/reauthenticate')
     .post(api.user.reauthenticate);
-  router.route('/user/forgot')
+
+  // User Forgot Password Routes
+  router.route('/user/forgotPassword')
+    .post(api.user.forgotPassword);
+  router.route('/user/authenticateResetPasswordToken')
+    .post(api.user.authenticateResetPasswordToken);
+  router.route('/user/resetPassword')
     .post(api.user.resetPassword);
 
   return router;
