@@ -1,13 +1,12 @@
 /*
-* LoginForm
+* ForgotPasswordForm
 */
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { Field, reduxForm } from 'redux-form/immutable';
+import { forgotPasswordRequest } from '../../containers/ForgotPasswordPage/actions';
 
-import { loginRequest } from './actions';
 import * as styles from './styles.css';
 
 const RenderField = ({ id, input, label, type, meta: { touched, error } }) => (
@@ -18,15 +17,12 @@ const RenderField = ({ id, input, label, type, meta: { touched, error } }) => (
   </div>
 );
 
-const LoginForm = function LoginForm({ handleSubmit, submitting }) {
+const ForgotPasswordForm = function ForgotPasswordForm({ handleSubmit, submitting }) {
   return (
     <form className={styles.login__form} onSubmit={handleSubmit}>
       <Field name="email" id="email" type="email" component={RenderField} label="Email" />
-      <Field name="password" id="password" type="password" component={RenderField} label="Password" />
       <div>
-        <button className="btn btn-primary btn-block" type="submit" disabled={submitting}>Sign in</button>
-        <p className="mt-3 mb-0">Need to create an account? <Link to="/signup">Sign up</Link></p>
-        <p className="mt-1 mb-0">Forgot your password? <Link to="/forgot">Click here</Link></p>
+        <button className="btn btn-primary btn-block" type="submit" disabled={submitting}>Reset Password</button>
       </div>
     </form>
   );
@@ -47,13 +43,13 @@ function mapDispatchToProps(dispatch, ownProps) {
       // handle async tasks with sagas
       // https://github.com/yelouafi/redux-saga/issues/161#issuecomment-191312502
       return new Promise((resolve, reject) => {
-        dispatch(loginRequest({ data, resolve, reject }));
+        dispatch(forgotPasswordRequest({ data, resolve, reject }));
       });
     },
   };
 }
 
-LoginForm.propTypes = {
+ForgotPasswordForm.propTypes = {
   handleSubmit: React.PropTypes.func.isRequired,
   submitting: React.PropTypes.bool.isRequired,
 };
@@ -68,4 +64,4 @@ RenderField.propTypes = {
 
 export default (connect(
   mapStateToProps, mapDispatchToProps)(
-  reduxForm({ form: 'loginForm' })(LoginForm)));
+  reduxForm({ form: 'forgotPasswordForm' })(ForgotPasswordForm)));

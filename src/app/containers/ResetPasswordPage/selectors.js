@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 /**
  * Direct selector to the ResetPasswordPage state domain
  */
-function selectselectResetPasswordPageDomain(state) {
+function selectResetPasswordPageDomain(state) {
   return state.resetPasswordPage;
 }
 
@@ -16,6 +16,6 @@ function selectselectResetPasswordPageDomain(state) {
  * Public selectors used by ResetPasswordPage
  */
 export const selectResetPasswordPage = createSelector(
-  selectselectResetPasswordPageDomain,
+  selectResetPasswordPageDomain,
   (substate) => substate
 );

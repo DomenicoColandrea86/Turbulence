@@ -82,7 +82,7 @@ const User = {
         const email = {
           from: config.get('mailer:emailFrom'),
           to: user.email,
-          subject: config.get('mailer:emailSubject'),
+          subject: config.get('mailer:resetPasswordEmailSubject'),
           text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
           Please click on the following link, or paste this into your browser to complete the process:\n\n
           http://${req.headers.host}/reset/${user.resetPasswordToken}\n\n
@@ -108,39 +108,48 @@ const User = {
     return res.status(403).send({ success: false, msg: 'Authentication failed.' });
   },
 
-  resetPassword: (req, res, next) => {
-    const password = req.body.password;
-    const token = req.body.token;
+  resetPassword: (req, res, next) =>
+    new Promise((resolve) => {
+      const password = req.body.password;
+      const token = req.body.token;
 
-    if (token) {
+      // forbidden without token
+      if (!token) return resolve({ success: false, msg: 'Authentication failed. Forbidden without token' });
+
       return Models.User.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } }, (err, user) => {
         // Password reset token is invalid or has expired.
-        if (err || !user) return res.status(401).json({ success: false, msg: err });
+        if (err || !user) return resolve({ success: false, msg: err });
 
-        // @todo, need to look into this
-        // user.update({
-        //     resetPasswordToken: token
-        //   }, {
-        //     $unset: {
-        //       resetPasswordToken: '',
-        //       resetPasswordExpires: '',
-        //     },
-        //   });
-
-        // set new password and save
+        // set new password
         user.password = password; // eslint-disable-line no-param-reassign
-        user.resetPasswordToken = null; // eslint-disable-line no-param-reassign
-        user.resetPasswordExpires = null; // eslint-disable-line no-param-reassign
+        // unset reset password fields
+        user.resetPasswordToken = undefined; // eslint-disable-line no-param-reassign
+        user.resetPasswordExpires = undefined; // eslint-disable-line no-param-reassign
 
-        return user.save((error) => {
-          if (error) return res.status(409).json({ success: false, msg: error.message });
-          return res.status(200).json({ success: true, msg: 'Successfully updated user.' });
+        return user.save((error, usr) => {
+          if (error) return resolve({ success: false, msg: error.message });
+          return resolve(usr);
         });
       });
-    }
-    // forbidden without token
-    return res.status(403).send({ success: false, msg: 'Authentication failed.' });
-  },
+    }).then((user) => {
+      const options = {
+        auth: {
+          api_key: config.get('mailer:sendGrid:api_key'),
+        },
+      };
+      const client = nodemailer.createTransport(sgTransport(options));
+      const email = {
+        from: config.get('mailer:emailFrom'),
+        to: user.email,
+        subject: config.get('mailer:changePasswordEmailSubject'),
+        text: `Hello,\n\n
+        This is a confirmation that the password for your account ${user.email} has just been changed.\n`,
+      };
+      return client.sendMail(email, (err) => {
+        if (err) return next(err);
+        return res.status(200).json({ success: true, msg: `Successfully updated ${user.email}'s password.` });
+      });
+    }),
 };
 
 module.exports = User;
