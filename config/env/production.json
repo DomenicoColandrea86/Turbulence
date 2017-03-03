@@ -5,11 +5,11 @@
   },
   "db": {
     "dialect": "mongodb",
-    "host": "localhost",
-    "port": 27017,
+    "host": "ds113580.mlab.com",
+    "port": 13580,
     "database": "Turbulence",
-    "username": "admin",
-    "password": "password"
+    "username": "heroku_3mcrml5p",
+    "password": "muvehu8aeknne9atimol56vh53"
   },
   "jwt": {
     "secret": "SOME AMAZING SECRET",
