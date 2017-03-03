@@ -18,7 +18,7 @@ class TurbulenceServer {
     this.httpServer = null;
     this.db = null;
     this.host = config.get('app:host');
-    this.port = config.get('app:port');
+    this.port = process.env.PORT || config.get('app:port');
     this.dbURI = `${config.get('db:dialect')}://${config.get('db:username')}:${config.get('db:password')}@${config.get('db:host')}:${config.get('db:port')}/${config.get('db:database')}`;
   }
 
