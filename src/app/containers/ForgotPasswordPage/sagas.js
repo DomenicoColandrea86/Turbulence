@@ -31,10 +31,8 @@ function* forgotPassword() {
     // listen for the FORGOT_PASSWORD_SUCCESS action
     const { payload } = yield take([FORGOT_PASSWORD_SUCCESS]);
 
-    if (payload.success) {
-      // resolve promise
-      yield call(resolve, payload);
-    }
+    // resolve promise
+    yield call(resolve, payload);
   } catch (error) {
     // dispatch FORGOT_PASSWORD_ERROR action
     yield put(forgotPasswordError(error));

@@ -10,17 +10,43 @@ const config = require('../../../config');
 
 const User = {
   create: (req, res, next) => {
-    const user = new Models.User({
-      email: req.body.email,
-      password: req.body.password,
-      username: req.body.username,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-    });
+    const password = req.body.password;
+    const authToken = req.body.token;
+    const isAuthorized = true;
 
-    user.save((err) => {
-      if (err) return res.status(409).json({ success: false, msg: err.message });
-      return res.status(200).json({ success: true, msg: 'Successfully created new user.' });
+    return new Promise((resolve, reject) => {
+      // forbidden without token
+      if (!authToken) return resolve({ success: false, msg: 'Authentication failed. Forbidden without token' });
+      // find temp user
+      return Models.TempUser.findOne({ confirmAccountToken: authToken, confirmAccountTokenExpires: { $gt: Date.now() } }, (err, tempUser) => {
+        // Confirm account token is invalid or has expired.
+        if (err || !tempUser) return reject({ success: false, msg: err });
+        // Resolve tempUser
+        return resolve(tempUser);
+      });
+    }).then((tempUser) => {
+      const { email, firstName, lastName } = tempUser;
+      // create account user
+      const user = new Models.User({
+        email,
+        password,
+        isAuthorized,
+        firstName,
+        lastName,
+      });
+
+      // save user to db
+      user.save((err, usr) => {
+        if (err) return res.status(409).json({ success: false, msg: err.message });
+        // if no errors delete temp user
+        tempUser.remove();
+        // create JWT
+        const token = jwt.sign(usr, config.get('jwt:secret'), {
+          expiresIn: config.get('jwt:expires'),
+        });
+        // return JWT and user
+        return res.status(200).json({ success: true, token, usr });
+      });
     });
   },
 
@@ -62,12 +88,63 @@ const User = {
     return res.status(403).send({ success: false, msg: 'Authentication failed.' });
   },
 
+  createTempUserSendVerifyEmail: (req, res, next) =>
+    new Promise((resolve, reject) => {
+      // create temp user
+      const tempUser = new Models.TempUser({
+        email: req.body.email,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        confirmAccountToken: crypto.randomBytes(64).toString('hex'),
+        confirmAccountTokenExpires: Date.now() + config.get('mailer:tokenExpires'),
+      });
+      // save temp user to db
+      tempUser.save((err, user) => {
+        if (err) return reject({ success: false, msg: err.message });
+        return resolve(user);
+      });
+    }).then(({ email, isAuthorized, confirmAccountToken }) => {
+      const options = {
+        auth: {
+          api_key: config.get('mailer:sendGrid:api_key'),
+        },
+      };
+      const client = nodemailer.createTransport(sgTransport(options));
+      const emailObj = {
+        from: config.get('mailer:emailFrom'),
+        to: email,
+        subject: config.get('mailer:confirmAccountEmailSubject'),
+        text: `Thanks for signing up with Turbulence! You must follow this link to activate your account:\n\n
+          Please click on the following link, or paste this into your browser to complete the process:\n\n
+          http://${req.headers.host}/account/accept/${confirmAccountToken}\n\n
+          Have fun, and don't hesitate to contact us with your feedback.\n\n
+          The Turbulence Team\n`,
+      };
+      return client.sendMail(emailObj, (err) => {
+        if (err) return next(err);
+        return res.status(200).json({ success: true, user: { email, isAuthorized } });
+      });
+    }).catch((error) => res.status(403).send(error)),
+
+  authenticateConfirmAccountToken: (req, res, next) => {
+    const token = req.body.token;
+    // forbidden without token
+    if (!token) return res.status(403).send({ success: false, msg: 'Authentication failed.' });
+    // authenticate temp user
+    return Models.TempUser.findOne({ confirmAccountToken: token, confirmAccountTokenExpires: { $gt: Date.now() } }, (err, user) => {
+      // Confirm account token is invalid or has expired.
+      if (err || !user) return res.status(401).json({ success: false, msg: err });
+      // Return success
+      return res.status(200).json({ success: true });
+    });
+  },
+
   forgotPassword: (req, res, next) =>
     new Promise((resolve, reject) =>
       Models.User.findOne({ email: req.body.email }, (err, user) => {
         if (!user) return resolve({ success: false, msg: 'Authentication failed. No account with that email address exists.' });
         user.resetPasswordToken = crypto.randomBytes(64).toString('hex'); // eslint-disable-line no-param-reassign
-        user.resetPasswordExpires = Date.now() + config.get('mailer:resetTokenExpires'); // eslint-disable-line no-param-reassign
+        user.resetPasswordExpires = Date.now() + config.get('mailer:tokenExpires'); // eslint-disable-line no-param-reassign
         return user.save((error) => {
           if (error) return reject({ success: false, msg: error.message });
           return resolve(user);
@@ -96,16 +173,15 @@ const User = {
 
   authenticateResetPasswordToken: (req, res, next) => {
     const token = req.body.token;
-    if (token) {
-      return Models.User.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } }, (err, user) => {
-        // Password reset token is invalid or has expired.
-        if (err || !user) return res.status(401).json({ success: false, msg: err });
-        // Return success
-        return res.status(200).json({ success: true });
-      });
-    }
     // forbidden without token
-    return res.status(403).send({ success: false, msg: 'Authentication failed.' });
+    if (!token) return res.status(403).send({ success: false, msg: 'Authentication failed.' });
+    // find user
+    return Models.User.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } }, (err, user) => {
+      // Password reset token is invalid or has expired.
+      if (err || !user) return res.status(401).json({ success: false, msg: err });
+      // Return success
+      return res.status(200).json({ success: true });
+    });
   },
 
   resetPassword: (req, res, next) =>

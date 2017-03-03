@@ -76,6 +76,34 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectHome,
+      path: '/account',
+      name: 'accountStatusPage',
+      getComponent(nextState, cb) {
+        import('containers/AccountStatusPage')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    }, {
+      path: '/account/accept/:token',
+      name: 'confirmAccountPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          import('./containers/ConfirmAccountPage/reducer'),
+          import('./containers/ConfirmAccountPage/sagas'),
+          import('./containers/ConfirmAccountPage'),
+        ]);
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('confirmAccountPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectHome,
       path: '/forgot',
       name: 'forgotPasswordPage',
       getComponent(nextState, cb) {

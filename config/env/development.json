@@ -25,9 +25,10 @@
     "sendGrid": {
       "api_key": "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"
     },
-    "emailFrom": "passwordreset@turbulence.com",
+    "emailFrom": "noreply@turbulence.com",
+    "confirmAccountEmailSubject": "Confirm your account on Turbulence",
     "resetPasswordEmailSubject": "Turbulence Password Reset",
     "changePasswordEmailSubject": "Your password has been changed",
-    "resetTokenExpires": 3600000
+    "tokenExpires": 3600000
   }
 }

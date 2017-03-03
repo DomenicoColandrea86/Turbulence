@@ -41,10 +41,8 @@ function* loginFlow() {
     // listen for the LOGIN_SUCCESS action
     const { payload } = yield take([LOGIN_SUCCESS]);
 
-    if (payload.success) {
-      // resolve promise
-      yield call(resolve, payload);
-    }
+    // resolve promise
+    yield call(resolve, payload);
   } catch (error) {
     // dispatch LOGIN_ERROR action
     yield put(loginError(error));

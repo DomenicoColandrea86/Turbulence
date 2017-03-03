@@ -32,12 +32,11 @@ function* resetPasswordFlow() {
     // listen for the RESET_PASSWORD_SUCCESS action
     const { payload } = yield take([RESET_PASSWORD_SUCCESS]);
 
-    if (payload.success) {
-      // redirect to login page
-      yield put(push('/login'));
-      // resolve promise
-      yield call(resolve, payload);
-    }
+    // resolve promise
+    yield call(resolve, payload);
+
+    // redirect to login page
+    yield put(push('/login'));
   } catch (error) {
     // dispatch RESET_PASSWORD_ERROR action
     yield put(resetPasswordError(error));

@@ -25,8 +25,8 @@ export function checkStore(store) {
   );
 }
 
-export function getUser(store) {
-  return store.getState().toJS().app.user;
+export function isUserAuthorized(store) {
+  return store.getState().toJS().app.user && store.getState().toJS().app.user.isAuthorized;
 }
 
 /**
@@ -71,7 +71,7 @@ export function injectAsyncSagas(store, isValid) {
 
 function redirectToLogin(store) {
   return (nextState, replace) => {
-    if (!getUser(store)) {
+    if (!isUserAuthorized(store)) {
       replace({
         pathname: '/login',
         state: { nextPathname: nextState.location.pathname },
@@ -82,7 +82,7 @@ function redirectToLogin(store) {
 
 function redirectHome(store) {
   return (nextState, replace) => {
-    if (getUser(store)) {
+    if (isUserAuthorized(store)) {
       replace('/');
     }
   };

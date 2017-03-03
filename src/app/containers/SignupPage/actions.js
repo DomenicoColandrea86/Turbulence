@@ -1,13 +1,26 @@
-/**
- * SignupPage actions
- */
-
 import {
-  DEFAULT_ACTION,
+  SIGNUP_REQUEST,
+  SIGNUP_SUCCESS,
+  SIGNUP_ERROR,
 } from './constants';
 
-export function defaultAction() {
+export function signupRequest(payload) {
   return {
-    type: DEFAULT_ACTION,
+    type: SIGNUP_REQUEST,
+    payload,
+  };
+}
+
+export function signupSuccess(payload) {
+  return {
+    type: SIGNUP_SUCCESS,
+    payload,
+  };
+}
+
+export function signupError(payload) {
+  return {
+    type: SIGNUP_ERROR,
+    payload,
   };
 }

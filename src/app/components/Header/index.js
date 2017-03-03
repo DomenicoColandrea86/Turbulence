@@ -40,7 +40,7 @@ const HeaderComponent = function HeaderComponent({ user, logout }) {
         <ul className="navbar-nav mr-auto">
           <li className="nav-item active">&nbsp;</li>
         </ul>
-        { !user ? <UnauthorizedNav /> : <AuthorizedNav {...({ user, logout })} /> }
+        { user && user.isAuthorized ? <AuthorizedNav {...({ user, logout })} /> : <UnauthorizedNav /> }
       </div>
     </nav>
   );

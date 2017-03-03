@@ -1,13 +1,12 @@
-/**
- * SignupForm
- */
+/*
+* ResetPasswordForm
+*/
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { Field, reduxForm } from 'redux-form/immutable';
 
-import { signupRequest } from '../../containers/SignupPage/actions';
+import { setPasswordRequest } from './actions';
 import * as styles from './styles.css';
 
 const RenderField = ({ id, input, label, type, meta: { touched, error } }) => (
@@ -18,15 +17,13 @@ const RenderField = ({ id, input, label, type, meta: { touched, error } }) => (
   </div>
 );
 
-const SignupForm = function SignupForm({ handleSubmit, submitting }) {
+const SetPasswordForm = function SetPasswordForm({ handleSubmit, submitting }) {
   return (
-    <form className={styles.signup__form} onSubmit={handleSubmit}>
-      <Field name="firstName" id="firstName" type="firstName" component={RenderField} label="First Name" />
-      <Field name="lastName" id="lastName" type="lastName" component={RenderField} label="Last Name" />
-      <Field name="email" id="email" type="email" component={RenderField} label="Email" />
+    <form className={styles.login__form} onSubmit={handleSubmit}>
+      <Field name="password" id="password" type="password" component={RenderField} label="Password" />
+      <Field name="confirmPassword" id="confirmPassword" type="password" component={RenderField} label="Confirm Password" />
       <div>
-        <button className="btn btn-primary btn-block" type="submit" disabled={submitting}>Create account</button>
-        <p className="mt-2 mb-0">Have an account? <Link to="/login">Sign in</Link></p>
+        <button className="btn btn-primary btn-block" type="submit" disabled={submitting}>Set password and login</button>
       </div>
     </form>
   );
@@ -43,17 +40,20 @@ function mapDispatchToProps(dispatch, ownProps) {
     actions: {
       ...ownProps.actions,
     },
-    onSubmit(data) {
+    onSubmit(formData) {
+      const token = ownProps.params.token;
+      const data = Object.assign({}, formData.toJS(), { token });
+      console.log('this is data from set password and log in form: ', data);
       // handle async tasks with sagas
       // https://github.com/yelouafi/redux-saga/issues/161#issuecomment-191312502
       return new Promise((resolve, reject) => {
-        dispatch(signupRequest({ data, resolve, reject }));
+        dispatch(setPasswordRequest({ data, resolve, reject }));
       });
     },
   };
 }
 
-SignupForm.propTypes = {
+SetPasswordForm.propTypes = {
   handleSubmit: React.PropTypes.func.isRequired,
   submitting: React.PropTypes.bool.isRequired,
 };
@@ -66,4 +66,6 @@ RenderField.propTypes = {
   meta: React.PropTypes.object.isRequired,
 };
 
-export default (connect(mapStateToProps, mapDispatchToProps)(reduxForm({ form: 'signupForm' })(SignupForm)));
+export default (connect(
+  mapStateToProps, mapDispatchToProps)(
+  reduxForm({ form: 'setPasswordForm' })(SetPasswordForm)));

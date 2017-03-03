@@ -31,9 +31,7 @@ function* authenticateToken() {
     const { payload } = yield take([AUTHENTICATE_RESET_PASSWORD_TOKEN_SUCCESS]);
 
     // resolve promise
-    if (payload.success) {
-      yield call(resolve, payload);
-    }
+    yield call(resolve, payload);
   } catch (error) {
     // dispatch AUTHENTICATE_RESET_PASSWORD_TOKEN_ERROR action
     yield put(authenticateResetPasswordTokenError(error));

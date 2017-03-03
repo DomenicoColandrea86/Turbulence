@@ -9,6 +9,7 @@ const UserSchema = new Schema({
   lastName: { type: String, required: true },
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true, select: false },
+  isAuthorized: { type: Boolean, required: true },
   create_dt: Date,
   modified_dt: Date,
   resetPasswordToken: String,
@@ -61,4 +62,20 @@ UserSchema.methods.comparePassword = function comparePassword(email, passw, cb) 
 // User Model
 const User = mongoose.model('User', UserSchema);
 
-module.exports = User;
+// Temp User Schema
+const TempUserSchema = new Schema({
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  email: { type: String, unique: true, required: true },
+  isAuthorized: { type: Boolean, required: true, default: false },
+  confirmAccountToken: String,
+  confirmAccountTokenExpires: Date,
+});
+
+// Temp User Model
+const TempUser = mongoose.model('TempUser', TempUserSchema);
+
+module.exports = {
+  User,
+  TempUser,
+};
