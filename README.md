@@ -73,7 +73,7 @@ Jest
 1. Install Mongodb
 1. Open a new terminal window and follow the steps below...<br>
 
-```
+~~~
 // connect to the mongo shell
 $ mongo
 
@@ -88,7 +88,7 @@ $ db.createUser(
   	roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
   }
 )
-  ```
+~~~
 
 ## Requirements
 * node `^6.9.1`
