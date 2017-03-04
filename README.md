@@ -56,6 +56,7 @@ While developing, you will probably rely mostly on `$ yarn start` however, there
 |`test`|description|
 |`test:watch`|description|
 |`coveralls`|description|
+|`heroku-postbuild`|description|
 
 ### Developer Tools
 
