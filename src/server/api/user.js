@@ -45,7 +45,7 @@ const User = {
           expiresIn: config.get('jwt:expires'),
         });
         // return JWT and user
-        return res.status(200).json({ success: true, token, usr });
+        return res.status(200).json({ success: true, token, user: usr });
       });
     });
   },

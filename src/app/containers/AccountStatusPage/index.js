@@ -15,7 +15,7 @@ class AccountStatus extends React.PureComponent { // eslint-disable-line react/p
             <p>Please check your email ({user.email}) to confirm your account.</p>
             <hr />
             <p>If {user.email} is not your email address, please go back and enter correct one.</p>
-            <p>If you haven&apost;t received our email in 15 minutes, please check your spam folder.</p>
+            <p>If you haven&#39;t received our email in 15 minutes, please check your spam folder.</p>
           </div>
         </div>
       </div>
