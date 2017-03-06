@@ -6,7 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form/immutable';
 
-import { resetPasswordRequest } from './actions';
+import { resetPasswordRequest } from '../../containers/ResetPasswordPage/actions';
 import * as styles from './styles.css';
 
 const RenderField = ({ id, input, label, type, meta: { touched, error } }) => (

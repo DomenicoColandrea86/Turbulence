@@ -17,7 +17,7 @@ import { bindActionCreators } from 'redux';
 import { createStructuredSelector } from 'reselect';
 
 import * as actions from './actions';
-import { logout as Logout } from '../../components/LoginForm/actions';
+import { logout as Logout } from '../LoginPage/actions';
 import { makeSelectUser } from './selectors';
 import Header from '../../components/Header';
 

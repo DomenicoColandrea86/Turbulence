@@ -9,8 +9,6 @@ import {
   AUTHENTICATE_FROM_TOKEN_ERROR,
 } from './constants';
 
-import { LOGOUT } from '../../components/LoginForm/constants';
-
 // The initial state of the App
 const initialState = fromJS({
   loading: false,
@@ -54,11 +52,6 @@ export default function appReducer(state = initialState, action) {
       return {
         ...state,
         error: action.error,
-      };
-
-    case LOGOUT:
-      return {
-        ...state,
       };
 
     default:

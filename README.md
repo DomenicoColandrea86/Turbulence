@@ -34,29 +34,17 @@ Application has two separate directory `app` and `server`. The entry point for f
 
 While developing, you will probably rely mostly on `$ yarn start` however, there are additional scripts at your disposal:
 
-|`yarn run <script>`|Description|
+|`yarn <script>`|Description|
 |-------------------|-----------|
-|`analyze:clean`|description|
-|`preanalyze`|description|
-|`analyze`|description|
-|`postinstall`|description|
-|`prebuild`|description|
-|`build`|description|
-|`build:clean`|description|
-|`build:dll`|description|
+|`analyze`|This command will generate a `stats.json` file from your production build which you can upload to the [webpack analyzer](https://webpack.github.io/analyse/) This analyzer will visualize your dependencies and chunks with detailed statistics about the bundle size.|
+|`build`|Preps your app for deployment (does not run tests). Optimizes and minifies all files, piping them to the `dist` folder.|
 |`start`|Serves your app at localhost:3000. HMR will be enabled in development.|
-|`start:production`|description|
-|`start:prod`|description|
+|`start:production`|Runs tests (see `yarn test`), Builds your app (see `yarn build`), Starts the production server (see `yarn start:prod`)|
+|`start:prod`|Starts the production server|
 |`clean:all`|description|
-|`lint`|description|
-|`lint:staged`|description|
-|`lint:js`|description|
-|`pretest`|description|
-|`test:clean`|description|
-|`test`|description|
-|`test:watch`|description|
+|`lint`|Lints your JavaScript.|
+|`test`|Tests your application with the unit tests specified in the `**/tests/*.js` files throughout the application. All the `test` commands allow an optional `--[string]` argument to filter the tests run by Jest. Useful if you need to run a specific test only.|
 |`coveralls`|description|
-|`heroku-postbuild`|description|
 
 ### Developer Tools
 

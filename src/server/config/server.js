@@ -17,7 +17,7 @@ class TurbulenceServer {
     this.rootApp = rootApp;
     this.httpServer = null;
     this.db = null;
-    this.host = config.get('app:host');
+    this.host = process.env.HOST || config.get('app:host');
     this.port = process.env.PORT || config.get('app:port');
     this.dbURI = `${config.get('db:dialect')}://${config.get('db:username')}:${config.get('db:password')}@${config.get('db:host')}:${config.get('db:port')}/${config.get('db:database')}`;
   }
@@ -48,7 +48,7 @@ class TurbulenceServer {
             console.log(`Connected to MongoDB ${chalk.green('✓')}`);
             console.log(`Turbulence Server started ${chalk.green('✓')}`);
             console.log(`\n${chalk.bold('Access URLs:')}${divider}`);
-            console.log(`Localhost: ${chalk.magenta(`http://${this.host}:${this.port}`)}`);
+            console.log(`Host: ${chalk.magenta(`http://${this.host}:${this.port}`)}`);
             console.log(`LAN: ${chalk.magenta(`http://${ip.address()}:${this.port}`)}`);
             console.log(`Database: ${chalk.magenta(this.dbURI)}${divider}`);
             console.log(`${chalk.blue(`Press ${chalk.italic('CTRL-C')} to stop`)}`);

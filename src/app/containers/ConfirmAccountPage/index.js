@@ -8,9 +8,9 @@ import { bindActionCreators } from 'redux';
 
 import * as actions from './actions';
 import { selectConfirmAccountPage } from './selectors';
-import SetPasswordForm from '../../components/SetPasswordForm';
+import ConfirmAccountForm from '../../components/ConfirmAccountForm';
 
-class ResetPasswordPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+class ConfirmAccountPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 
   componentWillMount() {
     this.props.authenticateConfirmAccountToken(this.props.params.token);
@@ -22,14 +22,14 @@ class ResetPasswordPage extends React.PureComponent { // eslint-disable-line rea
         <div className="col-lg-5 col-md-7 mx-auto">
           <h3 className="text-center mb-3">Set your password</h3>
           <p>Create your password and log in to your Turbulence account.</p>
-          <SetPasswordForm {...this.props} />
+          <ConfirmAccountForm {...this.props} />
         </div>
       </div>
     );
   }
 }
 
-ResetPasswordPage.propTypes = {
+ConfirmAccountPage.propTypes = {
   params: React.PropTypes.shape({
     token: React.PropTypes.string.isRequired,
   }),
@@ -61,4 +61,4 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ResetPasswordPage);
+export default connect(mapStateToProps, mapDispatchToProps)(ConfirmAccountPage);

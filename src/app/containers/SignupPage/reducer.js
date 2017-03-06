@@ -3,7 +3,6 @@
  */
 
 import {
-  DEFAULT_ACTION,
   SIGNUP_REQUEST,
   SIGNUP_SUCCESS,
   SIGNUP_ERROR,
@@ -31,8 +30,6 @@ export default function signupPageReducer(state = initialState, action) {
         error: action.error,
       };
 
-    case DEFAULT_ACTION:
-      return state;
     default:
       return state;
   }

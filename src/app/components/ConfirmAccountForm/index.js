@@ -1,12 +1,12 @@
 /*
-* ResetPasswordForm
+* ConfirmAccountForm
 */
 
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form/immutable';
 
-import { setPasswordRequest } from './actions';
+import { setPasswordRequest } from '../../containers/ConfirmAccountPage/actions';
 import * as styles from './styles.css';
 
 const RenderField = ({ id, input, label, type, meta: { touched, error } }) => (
@@ -17,7 +17,7 @@ const RenderField = ({ id, input, label, type, meta: { touched, error } }) => (
   </div>
 );
 
-const SetPasswordForm = function SetPasswordForm({ handleSubmit, submitting }) {
+const ConfirmAccountForm = function ConfirmAccountForm({ handleSubmit, submitting }) {
   return (
     <form className={styles.login__form} onSubmit={handleSubmit}>
       <Field name="password" id="password" type="password" component={RenderField} label="Password" />
@@ -43,7 +43,6 @@ function mapDispatchToProps(dispatch, ownProps) {
     onSubmit(formData) {
       const token = ownProps.params.token;
       const data = Object.assign({}, formData.toJS(), { token });
-      console.log('this is data from set password and log in form: ', data);
       // handle async tasks with sagas
       // https://github.com/yelouafi/redux-saga/issues/161#issuecomment-191312502
       return new Promise((resolve, reject) => {
@@ -53,7 +52,7 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-SetPasswordForm.propTypes = {
+ConfirmAccountForm.propTypes = {
   handleSubmit: React.PropTypes.func.isRequired,
   submitting: React.PropTypes.bool.isRequired,
 };
@@ -68,4 +67,4 @@ RenderField.propTypes = {
 
 export default (connect(
   mapStateToProps, mapDispatchToProps)(
-  reduxForm({ form: 'setPasswordForm' })(SetPasswordForm)));
+  reduxForm({ form: 'confirmAccountForm' })(ConfirmAccountForm)));

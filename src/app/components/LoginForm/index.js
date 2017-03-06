@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Field, reduxForm } from 'redux-form/immutable';
 
-import { loginRequest } from './actions';
+import { loginRequest } from '../../containers/LoginPage/actions';
 import * as styles from './styles.css';
 
 const RenderField = ({ id, input, label, type, meta: { touched, error } }) => (
