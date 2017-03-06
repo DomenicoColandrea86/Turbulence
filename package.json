@@ -33,7 +33,6 @@
     "test:clean": "rimraf ./coverage",
     "test": "cross-env NODE_ENV=test jest --coverage",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
-    "coveralls": "cat ./coverage/lcov.info | coveralls",
     "heroku-postbuild": "npm run build"
   },
   "lint-staged": {
@@ -292,7 +291,6 @@
     "babel-preset-stage-0": "6.16.0",
     "cheerio": "0.22.0",
     "circular-dependency-plugin": "2.0.0",
-    "coveralls": "2.11.15",
     "css-loader": "^0.26.1",
     "enzyme": "2.6.0",
     "eslint": "3.11.1",
