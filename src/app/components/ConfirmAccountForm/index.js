@@ -3,9 +3,12 @@
 */
 
 import React from 'react';
+import * as _ from 'lodash';
 import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form/immutable';
+import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 
+import schema from './schema';
+import validate from '../../utils/validation';
 import { setPasswordRequest } from '../../containers/ConfirmAccountPage/actions';
 import * as styles from './styles.css';
 
@@ -13,11 +16,12 @@ const RenderField = ({ id, input, label, type, meta: { touched, error } }) => (
   <div className="form-group">
     <label htmlFor={id}>{label}</label>
     <input {...input} type={type} placeholder={label} className="form-control" />
-    {touched && error && <span>{error}</span>}
+    {touched && error &&
+    <div className={styles.error}>{error}</div>}
   </div>
 );
 
-const ConfirmAccountForm = function ConfirmAccountForm({ handleSubmit, submitting }) {
+const ConfirmAccountForm = function ConfirmAccountForm({ error, handleSubmit, submitting }) {
   return (
     <form className={styles.login__form} onSubmit={handleSubmit}>
       <Field name="password" id="password" type="password" component={RenderField} label="Password" />
@@ -25,6 +29,7 @@ const ConfirmAccountForm = function ConfirmAccountForm({ handleSubmit, submittin
       <div>
         <button className="btn btn-primary btn-block" type="submit" disabled={submitting}>Set password and login</button>
       </div>
+      {error && <div className={styles.error}>{error}</div>}
     </form>
   );
 };
@@ -43,16 +48,21 @@ function mapDispatchToProps(dispatch, ownProps) {
     onSubmit(formData) {
       const token = ownProps.params.token;
       const data = Object.assign({}, formData.toJS(), { token });
-      // handle async tasks with sagas
-      // https://github.com/yelouafi/redux-saga/issues/161#issuecomment-191312502
+      const errors = validate(data, schema);
+      if (!_.isEmpty(errors)) throw new SubmissionError(errors);
       return new Promise((resolve, reject) => {
         dispatch(setPasswordRequest({ data, resolve, reject }));
+      }).then((response) => {
+        console.log('response: ', response);
+      }).catch((error) => {
+        throw new SubmissionError({ _error: error.msg });
       });
     },
   };
 }
 
 ConfirmAccountForm.propTypes = {
+  error: React.PropTypes.string,
   handleSubmit: React.PropTypes.func.isRequired,
   submitting: React.PropTypes.bool.isRequired,
 };
@@ -62,7 +72,10 @@ RenderField.propTypes = {
   input: React.PropTypes.object.isRequired,
   label: React.PropTypes.string.isRequired,
   type: React.PropTypes.string.isRequired,
-  meta: React.PropTypes.object.isRequired,
+  meta: React.PropTypes.shape({
+    error: React.PropTypes.object,
+    touched: React.PropTypes.bool,
+  }),
 };
 
 export default (connect(

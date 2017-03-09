@@ -7,7 +7,6 @@ import { take, call, put, fork } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import { SIGNUP_REQUEST, SIGNUP_SUCCESS } from './constants';
 import request from '../../utils/request';
-import { handleError } from '../../utils/reduxForms';
 import { signupSuccess, signupError } from './actions';
 import { setUserState } from '../App/actions';
 
@@ -60,6 +59,6 @@ function* signup(data, resolve, reject) {
     yield put(signupSuccess(response));
   } catch (err) {
     // reject the onSubmit promise of redux-form
-    reject(handleError(err));
+    reject(err);
   }
 }

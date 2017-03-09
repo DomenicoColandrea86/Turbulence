@@ -5,6 +5,7 @@
 /* eslint-disable no-constant-condition, consistent-return */
 import { take, call, put, fork } from 'redux-saga/effects';
 import request from '../../utils/request';
+import { removeItem } from '../../utils/localStorage';
 
 import {
   FORGOT_PASSWORD_REQUEST,
@@ -23,14 +24,13 @@ export default [
 function* forgotPassword() {
   // listen for the FORGOT_PASSWORD_REQUEST action
   const { payload: { data, resolve, reject } } = yield take(FORGOT_PASSWORD_REQUEST);
-
   try {
+    // remove jwt token from localstorage
+    yield call(removeItem, 'token');
     // execute the makeForgotPasswordRequest task asynchronously
     yield fork(makeForgotPasswordRequest, data, resolve, reject);
-
     // listen for the FORGOT_PASSWORD_SUCCESS action
     const { payload } = yield take([FORGOT_PASSWORD_SUCCESS]);
-
     // resolve promise
     yield call(resolve, payload);
   } catch (error) {
@@ -50,7 +50,6 @@ function* makeForgotPasswordRequest(data, resolve, reject) {
       body: JSON.stringify({ email }),
       mode: 'cors',
     });
-
     // dispatch FORGOT_PASSWORD_SUCCESS action
     yield put(forgotPasswordSuccess(response));
   } catch (err) {

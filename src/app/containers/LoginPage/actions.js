@@ -23,10 +23,10 @@ export function loginSuccess(payload) {
   };
 }
 
-export function loginError(payload) {
+export function loginError(error) {
   return {
     type: LOGIN_ERROR,
-    payload,
+    error,
   };
 }
 

@@ -34,11 +34,13 @@ function* authenticateToken() {
     yield fork(authorizeToken, token, resolve, reject);
     // listen for the AUTHENTICATE_CONFIRM_ACCOUNT_TOKEN_SUCCESS action
     const { payload } = yield take([AUTHENTICATE_CONFIRM_ACCOUNT_TOKEN_SUCCESS]);
+
     // dispatch action to set user details to app.user
     // in this case its just the email and isAuthorized flag
     yield put(setUserState({
       ...payload.user,
     }));
+
     yield call(resolve, payload);
   } catch (error) {
     // dispatch AUTHENTICATE_CONFIRM_ACCOUNT_TOKEN_ERROR action
@@ -56,6 +58,8 @@ function* authorizeToken(token, resolve, reject) {
       body: JSON.stringify({ token }),
       mode: 'cors',
     });
+    // throw error
+    if (!response.success) throw response;
     // dispatch AUTHENTICATE_CONFIRM_ACCOUNT_TOKEN_SUCCESS action
     yield put(authenticateConfirmAccountTokenSuccess(response));
   } catch (err) {

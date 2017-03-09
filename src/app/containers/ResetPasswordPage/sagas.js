@@ -51,6 +51,8 @@ function* authorizeToken(token, resolve, reject) {
       body: JSON.stringify({ token }),
       mode: 'cors',
     });
+    // throw error
+    if (!response.success) throw response;
     // dispatch AUTHENTICATE_RESET_PASSWORD_TOKEN_SUCCESS action
     yield put(authenticateResetPasswordTokenSuccess(response));
   } catch (err) {
@@ -92,6 +94,7 @@ function* setNewPassword(data, resolve, reject) {
       body: JSON.stringify({ password, token }),
       mode: 'cors',
     });
+    if (!response.success) throw response;
     // dispatch RESET_PASSWORD_SUCCESS action
     yield put(resetPasswordSuccess(response));
   } catch (err) {

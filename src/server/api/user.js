@@ -133,7 +133,7 @@ const User = {
     // authenticate temp user
     return Models.TempUser.findOne({ confirmAccountToken: token, confirmAccountTokenExpires: { $gt: Date.now() } }, (err, user) => {
       // Confirm account token is invalid or has expired.
-      if (err || !user) return res.status(401).json({ success: false, msg: err });
+      if (err || !user) return res.status(401).json({ success: false, msg: err || 'Invalid Token.' });
       // Return success
       return res.status(200).json({ success: true });
     });

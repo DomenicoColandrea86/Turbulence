@@ -74,6 +74,9 @@ function* authorize(data, resolve, reject) {
       body: JSON.stringify(data),
       mode: 'cors',
     });
+    if (!response.success) throw response;
+    // dispatch LOGIN_SUCCESS action
+    yield put(loginSuccess(response));
     // dispatch action to set user details to app.currentUser
     yield put(setUserState({
       ...response.user,
@@ -87,12 +90,10 @@ function* authorize(data, resolve, reject) {
     } else {
       yield put(push('/'));
     }
-    // dispatch LOGIN_SUCCESS action
-    yield put(loginSuccess(response));
   } catch (err) {
     // dispatch LOGIN_ERROR action
     yield put(loginError(err));
-    // reject error
+    // reject form error
     yield reject(err);
   }
 }

@@ -3,18 +3,19 @@
  */
 
 import React from 'react';
+import Promise from 'bluebird';
+import * as _ from 'lodash';
+import { SubmissionError } from 'redux-form/immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import schema from './schema';
 import * as actions from './actions';
 import { selectSignupPage } from './selectors';
+import validate from '../../utils/validation';
 import SignupForm from '../../components/SignupForm';
 
-@connect(mapStateToProps, mapDispatchToProps)
 class SignupPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-
-  static propTypes = propTypes;
-
   render() {
     return (
       <div className="row">
@@ -26,8 +27,6 @@ class SignupPage extends React.PureComponent { // eslint-disable-line react/pref
     );
   }
 }
-
-const propTypes = {};
 
 function mapStateToProps(state, ownProps) {
   return {
@@ -44,7 +43,18 @@ function mapDispatchToProps(dispatch, ownProps) {
       ...ownProps.actions,
       ...bindActionCreators(actions, dispatch),
     },
+    onSubmit(data) {
+      const errors = validate(data.toJS(), schema);
+      if (!_.isEmpty(errors)) throw new SubmissionError(errors);
+      return new Promise((resolve, reject) => {
+        dispatch(actions.signupRequest({ data, resolve, reject }));
+      }).then((response) => {
+        console.log('response: ', response);
+      }).catch((error) => {
+        throw new SubmissionError({ _error: error.msg });
+      });
+    },
   };
 }
 
-export default SignupPage;
+export default connect(mapStateToProps, mapDispatchToProps)((SignupPage));

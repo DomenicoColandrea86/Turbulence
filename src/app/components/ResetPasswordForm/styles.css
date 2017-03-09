@@ -3,3 +3,13 @@
   background: #f1f1f1;
   padding: 25px;
 }
+
+.error {
+  color: #d9534f;
+  padding: 2.5px 5px;
+}
+
+.success {
+  color: green;
+  padding: 2.5px 5px;
+}
