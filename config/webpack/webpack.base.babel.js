@@ -17,7 +17,7 @@ module.exports = (options) => ({
     loaders: [{
       test: /\.js$/, // Transform all .js files required somewhere with Babel
       loader: 'babel-loader',
-      exclude: /node_modules/,
+      exclude: [/joi/, /node_modules/],
       query: options.babelQuery,
     }, {
     }, {
@@ -100,6 +100,9 @@ module.exports = (options) => ({
       'jsnext:main',
       'main',
     ],
+    alias: {
+      joi: 'joi-browser',
+    },
   },
   devtool: options.devtool,
   target: 'web', // Make web variables accessible to webpack, e.g. window
