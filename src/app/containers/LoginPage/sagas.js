@@ -1,6 +1,6 @@
 /* eslint-disable no-constant-condition, consistent-return */
 
-import { take, call, join, put, fork, select } from 'redux-saga/effects';
+import { take, call, join, put, fork } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 
 import {
@@ -13,8 +13,6 @@ import request from '../../utils/request';
 import { loginError, loginSuccess } from './actions';
 import { setUserState } from '../../containers/App/actions';
 import { setItem, removeItem } from '../../utils/localStorage';
-import { selectNextPathname } from '../../common/selectors/router.selector';
-
 
 // All sagas to be loaded
 export default [
@@ -83,13 +81,7 @@ function* authorize(data, resolve, reject) {
     }));
     // set jwt token to localstorage
     yield call(setItem, 'token', response.token);
-    // redirect to nextPathName or to the profile page
-    const nextPathName = yield select(selectNextPathname);
-    if (nextPathName) {
-      yield put(push(nextPathName));
-    } else {
-      yield put(push('/'));
-    }
+    yield put(push('/'));
   } catch (err) {
     // dispatch LOGIN_ERROR action
     yield put(loginError(err));

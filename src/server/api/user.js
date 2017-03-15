@@ -63,7 +63,7 @@ const User = {
             expiresIn: config.get('jwt:expires'),
           });
           // return the information including token as JSON
-          return res.status(200).json({ success: true, token, user });
+          return res.status(200).json({ success: true, token, user, msg: 'Successfully logged in.' });
         }
         return res.status(401).json({ success: false, msg: 'Authentication failed. Password is incorrect.' });
       });

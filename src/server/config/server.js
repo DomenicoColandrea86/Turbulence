@@ -1,8 +1,10 @@
 
+const path = require('path');
 const chalk = require('chalk');
 const mongoose = require('mongoose');
 const Promise = require('bluebird');
 const ip = require('ip');
+const pkg = require(path.resolve(process.cwd(), 'package.json'));
 const config = require('../../../config');
 const divider = chalk.gray('\n-----------------------------------');
 mongoose.Promise = global.Promise; // https://github.com/Automattic/mongoose/issues/4291
@@ -45,10 +47,12 @@ class TurbulenceServer {
           // Listen on provided host:port
           this.httpServer = rootApp.listen(this.port, this.host, () => {
             // provide feedback
-            console.log(`Connected to MongoDB ${chalk.green('✓')}`);
-            console.log(`Turbulence Server started ${chalk.green('✓')}`);
+            console.log(divider);
+            console.log(`\n🔥 Igniting ${chalk.yellow(pkg.name)}`);
+            console.log(`${chalk.green('✔')} Connected to ${chalk.blue('MongoDB')}`);
+            console.log(`${chalk.green('✔')} Started ${chalk.blue('Application Server')}`);
             console.log(`\n${chalk.bold('Access URLs:')}${divider}`);
-            console.log(`Host: ${chalk.magenta(`http://${this.host}:${this.port}`)}`);
+            console.log(`Local: ${chalk.magenta(`http://${this.host}:${this.port}`)}`);
             console.log(`LAN: ${chalk.magenta(`http://${ip.address()}:${this.port}`)}`);
             console.log(`Database: ${chalk.magenta(this.dbURI)}${divider}`);
             console.log(`${chalk.blue(`Press ${chalk.italic('CTRL-C')} to stop`)}`);
@@ -59,7 +63,7 @@ class TurbulenceServer {
             // handle specific listen errors with friendly messages
             if (error.errno === 'EADDRINUSE') {
               console.error(
-                '(EADDRINUSE) Cannot start Turbulence.',
+                `(EADDRINUSE) Cannot start ${pkg.name}.`,
                 `Port ${this.port} is already in use by another program.`
               );
             } else {
@@ -114,9 +118,9 @@ class TurbulenceServer {
   // Log Start Messages
   addListeners() {
     function shutdown() {
-      console.log(chalk.red('\n Turbulence Server has shut down'));
+      console.log(chalk.red(`\n ${pkg.name} Server has shut down`));
       console.log(
-        '\n Turbulence was running for',
+        `\n ${pkg.name} was running for`,
         Math.round(process.uptime()),
         'seconds'
       );
@@ -131,7 +135,7 @@ class TurbulenceServer {
 
   // Log Shutdown Messages
   logShutdownMessages() {
-    console.log(chalk.red('Turbulence is closing connections'));
+    console.log(chalk.red(`${pkg.name} is closing connections`));
   }
 }
 

@@ -17,7 +17,7 @@ const makeSelectLocationState = () => {
   };
 };
 
-const selectApp = (state) => state.toJS().app;
+const selectApp = (state) => state.get('app');
 
 const makeSelectUser = () => createSelector(
   selectApp,

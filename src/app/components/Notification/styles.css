@@ -1,0 +1,9 @@
+
+.notification_container {
+  position: fixed;
+  display: block;
+  top: 75px;
+  right: 15px;
+  width: 400px;
+  z-index: 999999;
+}

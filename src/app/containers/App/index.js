@@ -20,6 +20,7 @@ import * as actions from './actions';
 import { logout as Logout } from '../LoginPage/actions';
 import { makeSelectUser } from './selectors';
 import Header from '../../components/Header';
+import Notifications from '../Notifications';
 
 export class App extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   componentWillMount() {
@@ -28,10 +29,12 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
 
   render() {
     const { user, logout } = this.props;
+    console.log(this.props);
 
     return (
       <div>
         <Header {...({ user, logout })} />
+        <Notifications {...this.props} />
         <section>
           <div className="container">
             <div className="row">
