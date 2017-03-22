@@ -46,7 +46,7 @@ export default function createReducer(asyncReducers) {
     route: routeReducer,
     form: formReducer,
     app: appReducer,
-    notification: notificationsReducer,
+    notifications: notificationsReducer,
     ...asyncReducers,
   });
 }

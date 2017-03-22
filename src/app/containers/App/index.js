@@ -19,6 +19,7 @@ import { createStructuredSelector } from 'reselect';
 import * as actions from './actions';
 import { logout as Logout } from '../LoginPage/actions';
 import { makeSelectUser } from './selectors';
+import { makeSelectNotifications } from '../Notifications/selectors';
 import Header from '../../components/Header';
 import Notifications from '../Notifications';
 
@@ -28,13 +29,11 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
   }
 
   render() {
-    const { user, logout } = this.props;
-    console.log(this.props);
-
+    const { user, logout, notifications } = this.props;
     return (
       <div>
         <Header {...({ user, logout })} />
-        <Notifications {...this.props} />
+        {notifications.length > 0 && <Notifications notifications={notifications} />}
         <section>
           <div className="container">
             <div className="row">
@@ -51,15 +50,16 @@ export class App extends React.PureComponent { // eslint-disable-line react/pref
 
 App.propTypes = {
   children: React.PropTypes.element.isRequired,
-  // actions: React.PropTypes.object.isRequired,
   user: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.bool]),
   loadUserFromToken: React.PropTypes.func.isRequired,
   logout: React.PropTypes.func.isRequired,
+  notifications: React.PropTypes.any,
 };
 
 const mapStateToProps = createStructuredSelector({
   user: makeSelectUser(),
   logout: Logout,
+  notifications: makeSelectNotifications(),
 });
 
 function mapDispatchToProps(dispatch, ownProps) {

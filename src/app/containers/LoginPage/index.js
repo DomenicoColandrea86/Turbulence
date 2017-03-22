@@ -14,7 +14,7 @@ import * as actions from './actions';
 import { selectLoginPage } from './selectors';
 import validate from '../../utils/validation';
 import LoginForm from '../../components/LoginForm';
-import { showSuccessNotification, showErrorNotification } from '../Notifications/actions';
+import { showSuccessNotificationRequest, showErrorNotificationRequest } from '../Notifications/actions';
 
 class LoginPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
@@ -50,11 +50,9 @@ function mapDispatchToProps(dispatch, ownProps) {
       return new Promise((resolve, reject) => {
         dispatch(actions.loginRequest({ data, resolve, reject }));
       }).then((response) => {
-        console.log('response: ', response);
-        dispatch(showSuccessNotification(response.msg));
+        if (response.success) dispatch(showSuccessNotificationRequest(response.msg));
       }).catch((error) => {
-        dispatch(showErrorNotification(error.msg));
-        throw new SubmissionError({ _error: error.msg });
+        dispatch(showErrorNotificationRequest(error.msg));
       });
     },
   };

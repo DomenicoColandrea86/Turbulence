@@ -1,9 +1,35 @@
 
-.notification_container {
-  position: fixed;
+.notifications_container {
+  position: absolute;
   display: block;
   top: 75px;
   right: 15px;
   width: 400px;
   z-index: 999999;
+}
+
+.notification_container {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.notification {
+  font-size: 14px;
+  animation: fadeInOut 4s;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }

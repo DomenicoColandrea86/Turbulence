@@ -5,14 +5,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
 import * as actions from './actions';
-import { selectNotification } from './selectors';
 import Notification from '../../components/Notification';
+
+import * as styles from '../../components/Notification/styles.css';
 
 class Notifications extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
-    return <Notification {...this.props} message={this.props.notification.text} />;
+    const { notifications, close } = this.props;
+    return (
+      <div className={styles.notifications_container}>
+        {notifications.map((notification, index) =>
+          <Notification notification={notification} key={index} close={close} />
+        )}
+      </div>
+    );
   }
 }
 
@@ -21,7 +28,6 @@ function mapStateToProps(state, ownProps) {
     state: {
       ...ownProps.state,
     },
-    notification: selectNotification(state),
   };
 }
 
@@ -31,18 +37,15 @@ function mapDispatchToProps(dispatch, ownProps) {
       ...ownProps.actions,
       ...bindActionCreators(actions, dispatch),
     },
-    close() {
-      dispatch(actions.hideNotification());
+    close(notification) {
+      dispatch(actions.hideNotification(notification));
     },
   };
 }
 
 Notifications.propTypes = {
-  notification: React.PropTypes.shape({
-    text: React.PropTypes.string.isRequired,
-    type: React.PropTypes.string.isRequired,
-    status: React.PropTypes.string.isRequired,
-  }),
+  notifications: React.PropTypes.any,
+  close: React.PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)((Notifications));

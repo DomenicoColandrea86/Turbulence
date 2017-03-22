@@ -4,7 +4,9 @@
 
 /* eslint-disable no-constant-condition, consistent-return */
 import { push } from 'react-router-redux';
+import * as _ from 'lodash';
 import { take, call, put, join, fork, select } from 'redux-saga/effects';
+
 import {
   GET_USER_TOKEN_FROM_LOCALSTORAGE,
   AUTHENTICATE_FROM_TOKEN,
@@ -20,10 +22,12 @@ import {
 import request from '../../utils/request';
 import { getItem } from '../../utils/localStorage';
 import { selectNextPathname } from '../../common/selectors/router.selector';
+import notificationSagas from '../Notifications/sagas';
 
-// Bootstrap sagas
+// Bootstrap App sagas
 export default [
   rootSaga,
+  _.once(...notificationSagas), // https://github.com/redux-saga/redux-saga/issues/451 or https://github.com/redux-saga/redux-saga/issues/548
 ];
 
 // app root saga

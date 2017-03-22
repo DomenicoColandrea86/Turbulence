@@ -63,3 +63,12 @@ export function authenticateFromTokenError(error) {
     error,
   };
 }
+
+export function setNotificationsState(notifications) {
+  return {
+    type: SET_USER_STATE,
+    notifications: [
+      ...notifications,
+    ],
+  };
+}

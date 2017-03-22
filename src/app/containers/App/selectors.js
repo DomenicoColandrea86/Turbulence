@@ -27,8 +27,5 @@ const makeSelectUser = () => createSelector(
 export {
   selectApp,
   makeSelectUser,
-};
-
-export {
   makeSelectLocationState,
 };
