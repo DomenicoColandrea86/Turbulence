@@ -17,7 +17,6 @@ import { bindActionCreators } from 'redux';
 import { createStructuredSelector } from 'reselect';
 
 import * as actions from './actions';
-import { logout as Logout } from '../LoginPage/actions';
 import { makeSelectUser } from './selectors';
 import { makeSelectNotifications } from '../Notifications/selectors';
 import Header from '../../components/Header';
@@ -58,7 +57,6 @@ App.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   user: makeSelectUser(),
-  logout: Logout,
   notifications: makeSelectNotifications(),
 });
 
@@ -66,7 +64,7 @@ function mapDispatchToProps(dispatch, ownProps) {
   return {
     actions: {
       ...ownProps.actions,
-      ...bindActionCreators({ ...actions, Logout }, dispatch),
+      ...bindActionCreators({ ...actions }, dispatch),
     },
     loadUserFromToken() {
       // handle async tasks with sagas
@@ -76,7 +74,7 @@ function mapDispatchToProps(dispatch, ownProps) {
         .catch((error) => error);
     },
     logout() {
-      dispatch(Logout());
+      dispatch(actions.removeLoggedUser());
     },
   };
 }

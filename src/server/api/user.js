@@ -16,11 +16,11 @@ const User = {
 
     return new Promise((resolve, reject) => {
       // forbidden without token
-      if (!authToken) return resolve({ success: false, msg: 'Authentication failed. Forbidden without token' });
+      if (!authToken) return resolve({ success: false, message: 'Authentication failed. Forbidden without token' });
       // find temp user
       return Models.TempUser.findOne({ confirmAccountToken: authToken, confirmAccountTokenExpires: { $gt: Date.now() } }, (err, tempUser) => {
         // Confirm account token is invalid or has expired.
-        if (err || !tempUser) return reject({ success: false, msg: err });
+        if (err || !tempUser) return reject({ success: false, message: err });
         // Resolve tempUser
         return resolve(tempUser);
       });
@@ -37,7 +37,7 @@ const User = {
 
       // save user to db
       user.save((err, usr) => {
-        if (err) return res.status(409).json({ success: false, msg: err.message });
+        if (err) return res.status(409).json({ success: false, message: err.message });
         // if no errors delete temp user
         tempUser.remove();
         // create JWT
@@ -54,7 +54,11 @@ const User = {
     Models.User.findOne({ email: req.body.email }, (err, user) => {
       if (err) return next(err);
       // if user doesn't exist return 404
-      if (!user) return res.status(404).json({ success: false, msg: 'Authentication failed. User not found.' });
+      if (!user) {
+        res.status(401);
+        res.statusMessage = 'Authentication failed. User not found.'; // eslint-disable-line no-param-reassign
+        return res.send({ success: false, message: 'Authentication failed. User not found.' });
+      }
       // check if password matches
       return user.comparePassword(req.body.email, req.body.password, (error, isMatch) => {
         if (isMatch && !error) {
@@ -62,10 +66,14 @@ const User = {
           const token = jwt.sign(user, config.get('jwt:secret'), {
             expiresIn: config.get('jwt:expires'),
           });
-          // return the information including token as JSON
-          return res.status(200).json({ success: true, token, user, msg: 'Successfully logged in.' });
+          // return the information including token
+          res.status(200);
+          return res.send({ success: true, token, user, message: 'Successfully logged in.' });
         }
-        return res.status(401).json({ success: false, msg: 'Authentication failed. Password is incorrect.' });
+        // if user is unauthorized return 401
+        res.status(401);
+        res.statusMessage = 'Authentication failed. Password is incorrect.'; // eslint-disable-line no-param-reassign
+        return res.send({ success: false, message: 'Authentication failed. Password is incorrect.' });
       });
     });
   },
@@ -76,16 +84,16 @@ const User = {
       // verifies secret and checks exp
       return jwt.verify(token, config.get('jwt:secret'), (err, decoded) => {
         // failed verification.
-        if (err) return res.status(401).send({ success: false, msg: err.message });
+        if (err) return res.status(401).send({ success: false, message: err.message });
         // return user
         return Models.User.findById({ _id: mongoose.Types.ObjectId(decoded._doc._id) }, (error, user) => { // eslint-disable-line no-underscore-dangle
-          if (error) return res.status(401).json({ success: false, msg: error.message });
+          if (error) return res.status(401).json({ success: false, message: error.message });
           return res.status(200).json({ success: true, token, user });
         });
       });
     }
     // forbidden without token
-    return res.status(403).send({ success: false, msg: 'Authentication failed.' });
+    return res.status(403).send({ success: false, message: 'Authentication failed.' });
   },
 
   createTempUserSendVerifyEmail: (req, res, next) =>
@@ -100,7 +108,7 @@ const User = {
       });
       // save temp user to db
       tempUser.save((err, user) => {
-        if (err) return reject({ success: false, msg: err.message });
+        if (err) return reject({ success: false, message: err.message });
         return resolve(user);
       });
     }).then(({ email, isAuthorized, confirmAccountToken }) => {
@@ -129,11 +137,11 @@ const User = {
   authenticateConfirmAccountToken: (req, res, next) => {
     const token = req.body.token;
     // forbidden without token
-    if (!token) return res.status(403).send({ success: false, msg: 'Authentication failed.' });
+    if (!token) return res.status(403).send({ success: false, message: 'Authentication failed.' });
     // authenticate temp user
     return Models.TempUser.findOne({ confirmAccountToken: token, confirmAccountTokenExpires: { $gt: Date.now() } }, (err, user) => {
       // Confirm account token is invalid or has expired.
-      if (err || !user) return res.status(401).json({ success: false, msg: err || 'Invalid Token.' });
+      if (err || !user) return res.status(401).json({ success: false, message: err || 'Invalid Token.' });
       // Return success
       return res.status(200).json({ success: true });
     });
@@ -142,11 +150,11 @@ const User = {
   forgotPassword: (req, res, next) =>
     new Promise((resolve, reject) =>
       Models.User.findOne({ email: req.body.email }, (err, user) => {
-        if (!user) return resolve({ success: false, msg: 'Authentication failed. No account with that email address exists.' });
+        if (!user) return resolve({ success: false, message: 'Authentication failed. No account with that email address exists.' });
         user.resetPasswordToken = crypto.randomBytes(64).toString('hex'); // eslint-disable-line no-param-reassign
         user.resetPasswordExpires = Date.now() + config.get('mailer:tokenExpires'); // eslint-disable-line no-param-reassign
         return user.save((error) => {
-          if (error) return reject({ success: false, msg: error.message });
+          if (error) return reject({ success: false, message: error.message });
           return resolve(user);
         });
       })).then((user) => {
@@ -167,18 +175,18 @@ const User = {
         };
         return client.sendMail(email, (err) => {
           if (err) return next(err);
-          return res.status(200).json({ success: true, msg: `An e-mail has been sent to ${user.email} with further instructions.` });
+          return res.status(200).json({ success: true, message: `An e-mail has been sent to ${user.email} with further instructions.` });
         });
       }),
 
   authenticateResetPasswordToken: (req, res, next) => {
     const token = req.body.token;
     // forbidden without token
-    if (!token) return res.status(403).send({ success: false, msg: 'Authentication failed.' });
+    if (!token) return res.status(403).send({ success: false, message: 'Authentication failed.' });
     // find user
     return Models.User.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } }, (err, user) => {
       // Password reset token is invalid or has expired.
-      if (err || !user) return res.status(401).json({ success: false, msg: err });
+      if (err || !user) return res.status(401).json({ success: false, message: err });
       // Return success
       return res.status(200).json({ success: true });
     });
@@ -190,11 +198,11 @@ const User = {
       const token = req.body.token;
 
       // forbidden without token
-      if (!token) return resolve({ success: false, msg: 'Authentication failed. Forbidden without token' });
+      if (!token) return resolve({ success: false, message: 'Authentication failed. Forbidden without token' });
 
       return Models.User.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } }, (err, user) => {
         // Password reset token is invalid or has expired.
-        if (err || !user) return resolve({ success: false, msg: err });
+        if (err || !user) return resolve({ success: false, message: err });
 
         // set new password
         user.password = password; // eslint-disable-line no-param-reassign
@@ -203,7 +211,7 @@ const User = {
         user.resetPasswordExpires = undefined; // eslint-disable-line no-param-reassign
 
         return user.save((error, usr) => {
-          if (error) return resolve({ success: false, msg: error.message });
+          if (error) return resolve({ success: false, message: error.message });
           return resolve(usr);
         });
       });
@@ -223,7 +231,7 @@ const User = {
       };
       return client.sendMail(email, (err) => {
         if (err) return next(err);
-        return res.status(200).json({ success: true, msg: `Successfully updated ${user.email}'s password.` });
+        return res.status(200).json({ success: true, message: `Successfully updated ${user.email}'s password.` });
       });
     }),
 };

@@ -4,7 +4,6 @@
 
 import React from 'react';
 import * as _ from 'lodash';
-import Promise from 'bluebird';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { SubmissionError } from 'redux-form/immutable';
@@ -14,7 +13,6 @@ import * as actions from './actions';
 import { selectLoginPage } from './selectors';
 import validate from '../../utils/validation';
 import LoginForm from '../../components/LoginForm';
-import { showSuccessNotificationRequest, showErrorNotificationRequest } from '../Notifications/actions';
 
 class LoginPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
@@ -47,13 +45,7 @@ function mapDispatchToProps(dispatch, ownProps) {
     onSubmit(data) {
       const errors = validate(data.toJS(), schema);
       if (!_.isEmpty(errors)) throw new SubmissionError(errors);
-      return new Promise((resolve, reject) => {
-        dispatch(actions.loginRequest({ data, resolve, reject }));
-      }).then((response) => {
-        if (response.success) dispatch(showSuccessNotificationRequest(response.msg));
-      }).catch((error) => {
-        dispatch(showErrorNotificationRequest(error.msg));
-      });
+      dispatch(actions.loginRequest(data));
     },
   };
 }

@@ -1,5 +1,6 @@
 
 import {
+  REMOVE_LOGGED_USER,
   SET_LOADING_STATE,
   SET_ERROR_STATE,
   SET_USER_STATE,
@@ -9,66 +10,47 @@ import {
   AUTHENTICATE_FROM_TOKEN_ERROR,
 } from './constants';
 
-export function setLoadingState(loading) {
-  return {
-    type: SET_LOADING_STATE,
-    payload: {
-      loading,
-    },
-  };
-}
+export const setLoadingState = (loading) => ({
+  type: SET_LOADING_STATE,
+  payload: {
+    loading,
+  },
+});
 
-export function setErrorState(error = new Error('Something went wrong.')) {
-  return {
-    type: SET_ERROR_STATE,
-    payload: {
-      error,
-    },
-  };
-}
-
-export function setUserState(user) {
-  return {
-    type: SET_USER_STATE,
-    payload: {
-      user,
-    },
-  };
-}
-
-export function getUserTokenFromLocalstorage(payload) {
-  return {
-    type: GET_USER_TOKEN_FROM_LOCALSTORAGE,
-    payload,
-  };
-}
-
-export function authenticateFromToken(payload) {
-  return {
-    type: AUTHENTICATE_FROM_TOKEN,
-    payload,
-  };
-}
-
-export function authenticateFromTokenSuccess(payload) {
-  return {
-    type: AUTHENTICATE_FROM_TOKEN_SUCCESS,
-    payload,
-  };
-}
-
-export function authenticateFromTokenError(error) {
-  return {
-    type: AUTHENTICATE_FROM_TOKEN_ERROR,
+export const setErrorState = (error = new Error('Something went wrong.')) => ({
+  type: SET_ERROR_STATE,
+  payload: {
     error,
-  };
-}
+  },
+});
 
-export function setNotificationsState(notifications) {
-  return {
-    type: SET_USER_STATE,
-    notifications: [
-      ...notifications,
-    ],
-  };
-}
+export const removeLoggedUser = () => ({
+  type: REMOVE_LOGGED_USER,
+});
+
+export const setUserState = (user) => ({
+  type: SET_USER_STATE,
+  payload: {
+    user,
+  },
+});
+
+export const getUserTokenFromLocalstorage = (payload) => ({
+  type: GET_USER_TOKEN_FROM_LOCALSTORAGE,
+  payload,
+});
+
+export const authenticateFromToken = (payload) => ({
+  type: AUTHENTICATE_FROM_TOKEN,
+  payload,
+});
+
+export const authenticateFromTokenSuccess = (payload) => ({
+  type: AUTHENTICATE_FROM_TOKEN_SUCCESS,
+  payload,
+});
+
+export const authenticateFromTokenError = (error) => ({
+  type: AUTHENTICATE_FROM_TOKEN_ERROR,
+  error,
+});

@@ -1,6 +1,7 @@
 import { fromJS } from 'immutable';
 
 import {
+  REMOVE_LOGGED_USER,
   SET_LOADING_STATE,
   SET_ERROR_STATE,
   SET_USER_STATE,
@@ -18,6 +19,10 @@ const initialState = fromJS({
 
 export default function appReducer(state = initialState, action) {
   switch (action.type) {
+    case REMOVE_LOGGED_USER:
+      return {
+        ...state,
+      };
     case SET_LOADING_STATE:
       return {
         ...state,

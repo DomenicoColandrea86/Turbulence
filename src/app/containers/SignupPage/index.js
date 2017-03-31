@@ -51,7 +51,7 @@ function mapDispatchToProps(dispatch, ownProps) {
       }).then((response) => {
         console.log('response: ', response);
       }).catch((error) => {
-        throw new SubmissionError({ _error: error.msg });
+        throw new SubmissionError({ _error: error.message });
       });
     },
   };

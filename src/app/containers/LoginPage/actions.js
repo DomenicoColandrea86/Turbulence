@@ -6,7 +6,6 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_ERROR,
-  LOGOUT,
 } from './constants';
 
 export function loginRequest(payload) {
@@ -27,11 +26,5 @@ export function loginError(error) {
   return {
     type: LOGIN_ERROR,
     error,
-  };
-}
-
-export function logout() {
-  return {
-    type: LOGOUT,
   };
 }

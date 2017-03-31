@@ -8,7 +8,7 @@ const authenticateToken = function authenticate(req, res, next) {
     // verifies secret and checks exp
     return jwt.verify(token, config.get('jwt:secret'), (err, decoded) => {
       // failed verification.
-      if (err) return res.status(401).send({ status: res.statusCode, msg: err.message });
+      if (err) return res.status(401).send({ status: res.statusCode, message: err.message });
       req.decoded = decoded; // eslint-disable-line no-param-reassign
       return next();
     });
