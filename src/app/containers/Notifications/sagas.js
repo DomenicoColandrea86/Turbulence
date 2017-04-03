@@ -21,6 +21,6 @@ function* initNotification(action) {
     yield call(delay, 4100);
     yield put(hideNotification(notification));
   } catch (error) {
-    console.log('ERROR: ', error);
+    console.error(error); // eslint-disable-line no-console
   }
 }

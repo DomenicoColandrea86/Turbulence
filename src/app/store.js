@@ -46,7 +46,7 @@ export default function configureStore(initialState = {}, history) {
   /* istanbul ignore next */
   if (module.hot) {
     module.hot.accept('./reducers', () => {
-      import('./reducers').then((reducerModule) => {
+      require('./reducers').then((reducerModule) => { // eslint-disable-line global-require
         const createReducers = reducerModule.default;
         const nextReducers = createReducers(store.asyncReducers);
         store.replaceReducer(nextReducers);

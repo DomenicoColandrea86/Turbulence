@@ -23,6 +23,8 @@ const apiRoutes = function apiRoutes(middleware) { // eslint-disable-line no-unu
     .post(api.user.resetPassword);
   router.route('/user/authenticateResetPasswordToken')
     .post(api.user.authenticateResetPasswordToken);
+  router.route('/user/logout')
+    .post(api.user.logout);
 
   return router;
 };

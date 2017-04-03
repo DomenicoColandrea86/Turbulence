@@ -38,7 +38,6 @@ function* signupFlow() {
       yield call(resolve, payload);
     }
   } catch (error) {
-    console.log('what is the error ', error);
     // dispatch SIGNUP_ERROR action
     yield put(signupError(error));
     yield reject(error);

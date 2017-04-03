@@ -5,7 +5,6 @@ import {
   SET_LOADING_STATE,
   SET_ERROR_STATE,
   SET_USER_STATE,
-  GET_USER_TOKEN_FROM_LOCALSTORAGE,
   AUTHENTICATE_FROM_TOKEN,
   AUTHENTICATE_FROM_TOKEN_ERROR,
 } from './constants';
@@ -41,16 +40,10 @@ export default function appReducer(state = initialState, action) {
         user: action.payload.user,
       };
 
-    case GET_USER_TOKEN_FROM_LOCALSTORAGE:
-      return {
-        ...state,
-        payload: action.payload,
-      };
-
     case AUTHENTICATE_FROM_TOKEN:
       return {
         ...state,
-        payload: action.payload,
+        token: action.payload.token,
       };
 
     case AUTHENTICATE_FROM_TOKEN_ERROR:

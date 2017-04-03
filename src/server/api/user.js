@@ -234,6 +234,12 @@ const User = {
         return res.status(200).json({ success: true, message: `Successfully updated ${user.email}'s password.` });
       });
     }),
+
+  logout: (req, res, next) => {
+    // Return success for now ... need to implement proper logout
+    res.status(200);
+    return res.send({ success: true });
+  },
 };
 
 module.exports = User;

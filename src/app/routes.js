@@ -1,7 +1,7 @@
+/* eslint-disable global-require */
+
 // These are the pages you can go to.
 // They are all wrapped in the App component, which should contain the navbar etc
-// See http://blog.mxstbr.com/2016/01/react-apps-with-pages for more information
-// about the code splitting business
 import { getAsyncInjectors } from 'utils/asyncInjectors';
 
 const errorLoading = (err) => {
@@ -23,7 +23,7 @@ export default function createRoutes(store) {
       name: 'home',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          import('containers/HomePage'),
+          require('containers/HomePage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -40,9 +40,9 @@ export default function createRoutes(store) {
       name: 'loginPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          import('./containers/LoginPage/reducer'),
-          import('./containers/LoginPage/sagas'),
-          import('./containers/LoginPage'),
+          require('./containers/LoginPage/reducer'),
+          require('./containers/LoginPage/sagas'),
+          require('./containers/LoginPage'),
         ]);
         const renderRoute = loadModule(cb);
 
@@ -60,9 +60,9 @@ export default function createRoutes(store) {
       name: 'signupPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          import('./containers/SignupPage/reducer'),
-          import('./containers/SignupPage/sagas'),
-          import('./containers/SignupPage'),
+          require('./containers/SignupPage/reducer'),
+          require('./containers/SignupPage/sagas'),
+          require('./containers/SignupPage'),
         ]);
         const renderRoute = loadModule(cb);
 
@@ -79,7 +79,7 @@ export default function createRoutes(store) {
       path: '/account',
       name: 'accountStatusPage',
       getComponent(nextState, cb) {
-        import('containers/AccountStatusPage')
+        require('containers/AccountStatusPage')
           .then(loadModule(cb))
           .catch(errorLoading);
       },
@@ -88,9 +88,9 @@ export default function createRoutes(store) {
       name: 'confirmAccountPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          import('./containers/ConfirmAccountPage/reducer'),
-          import('./containers/ConfirmAccountPage/sagas'),
-          import('./containers/ConfirmAccountPage'),
+          require('./containers/ConfirmAccountPage/reducer'),
+          require('./containers/ConfirmAccountPage/sagas'),
+          require('./containers/ConfirmAccountPage'),
         ]);
         const renderRoute = loadModule(cb);
 
@@ -108,9 +108,9 @@ export default function createRoutes(store) {
       name: 'forgotPasswordPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          import('./containers/ForgotPasswordPage/reducer'),
-          import('./containers/ForgotPasswordPage/sagas'),
-          import('./containers/ForgotPasswordPage'),
+          require('./containers/ForgotPasswordPage/reducer'),
+          require('./containers/ForgotPasswordPage/sagas'),
+          require('./containers/ForgotPasswordPage'),
         ]);
         const renderRoute = loadModule(cb);
 
@@ -127,9 +127,9 @@ export default function createRoutes(store) {
       name: 'resetPasswordPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          import('./containers/ResetPasswordPage/reducer'),
-          import('./containers/ResetPasswordPage/sagas'),
-          import('./containers/ResetPasswordPage'),
+          require('./containers/ResetPasswordPage/reducer'),
+          require('./containers/ResetPasswordPage/sagas'),
+          require('./containers/ResetPasswordPage'),
         ]);
         const renderRoute = loadModule(cb);
 
@@ -145,7 +145,7 @@ export default function createRoutes(store) {
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {
-        import('containers/NotFoundPage')
+        require('containers/NotFoundPage')
           .then(loadModule(cb))
           .catch(errorLoading);
       },
@@ -156,9 +156,9 @@ export default function createRoutes(store) {
     name: 'app',
     getComponent(nextState, cb) {
       const importModules = Promise.all([
-        import('./containers/App/reducer'),
-        import('containers/App/sagas'),
-        import('containers/App'),
+        require('./containers/App/reducer'),
+        require('containers/App/sagas'),
+        require('containers/App'),
       ]);
       const renderRoute = loadModule(cb);
       importModules.then(([reducer, sagas, component]) => {

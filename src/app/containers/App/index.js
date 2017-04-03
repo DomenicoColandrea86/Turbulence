@@ -21,6 +21,7 @@ import { makeSelectUser } from './selectors';
 import { makeSelectNotifications } from '../Notifications/selectors';
 import Header from '../../components/Header';
 import Notifications from '../Notifications';
+import { getItem } from '../../utils/localStorage';
 
 export class App extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   componentWillMount() {
@@ -67,11 +68,8 @@ function mapDispatchToProps(dispatch, ownProps) {
       ...bindActionCreators({ ...actions }, dispatch),
     },
     loadUserFromToken() {
-      // handle async tasks with sagas
-      return new Promise((resolve, reject) => {
-        dispatch(actions.getUserTokenFromLocalstorage({ resolve, reject }));
-      }).then((response) => response)
-        .catch((error) => error);
+      const token = getItem('token');
+      if (token) dispatch(actions.authFromToken(token));
     },
     logout() {
       dispatch(actions.removeLoggedUser());

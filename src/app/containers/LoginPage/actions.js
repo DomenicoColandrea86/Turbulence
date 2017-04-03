@@ -8,23 +8,17 @@ import {
   LOGIN_ERROR,
 } from './constants';
 
-export function loginRequest(payload) {
-  return {
-    type: LOGIN_REQUEST,
-    payload,
-  };
-}
+export const loginRequest = (payload) => ({
+  type: LOGIN_REQUEST,
+  payload,
+});
 
-export function loginSuccess(payload) {
-  return {
-    type: LOGIN_SUCCESS,
-    payload,
-  };
-}
+export const loginSuccess = (payload) => ({
+  type: LOGIN_SUCCESS,
+  payload,
+});
 
-export function loginError(error) {
-  return {
-    type: LOGIN_ERROR,
-    error,
-  };
-}
+export const loginError = (error) => ({
+  type: LOGIN_ERROR,
+  error,
+});

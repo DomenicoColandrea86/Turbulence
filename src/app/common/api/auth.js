@@ -1,7 +1,7 @@
 import { fetchJson } from '../../utils/fetch';
 
 const auth = {
-  // Logs a user in, returning a promise with `true` when done
+  // Logs a user in
   login({ email, password }) {
     return fetchJson('/api/v1/user/authenticate', {
       method: 'POST',
@@ -15,6 +15,16 @@ const auth = {
   logout() {
     return fetchJson('/api/v1/user/logout', {
       method: 'POST',
+    });
+  },
+
+  /**
+   * Reauthenticate token
+   */
+  reauthenticate({ token }) {
+    return fetchJson('/api/v1/user/reauthenticate', {
+      method: 'POST',
+      body: JSON.stringify({ token }),
     });
   },
 };

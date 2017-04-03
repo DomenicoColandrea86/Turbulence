@@ -61,8 +61,6 @@ function mapDispatchToProps(dispatch, ownProps) {
       if (!_.isEmpty(errors)) throw new SubmissionError(errors);
       return new Promise((resolve, reject) => {
         dispatch(actions.resetPasswordRequest({ data, resolve, reject }));
-      }).then((response) => {
-        console.log('response: ', response);
       }).catch((error) => {
         throw new SubmissionError({ _error: error.message });
       });

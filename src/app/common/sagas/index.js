@@ -1,5 +1,6 @@
 import { call, put, take, race } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
+import { Iterable } from 'immutable';
 
 import {
   markRequestPending,
@@ -22,7 +23,8 @@ export const createRequestSaga = ({ request, key, start, stop, success, failure,
   function* requestSaga(action) {
     let args;
     if (action.payload) {
-      args = Array.isArray(action.payload.toJS()) ? action.payload.toJS() : [action.payload.toJS()];
+      const payload = (Iterable.isIterable(action.payload)) ? action.payload.toJS() : action.payload;
+      args = Array.isArray(payload) ? payload : [payload];
     } else {
       // default is empty
       args = [];

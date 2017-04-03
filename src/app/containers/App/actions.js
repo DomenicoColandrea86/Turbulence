@@ -4,7 +4,6 @@ import {
   SET_LOADING_STATE,
   SET_ERROR_STATE,
   SET_USER_STATE,
-  GET_USER_TOKEN_FROM_LOCALSTORAGE,
   AUTHENTICATE_FROM_TOKEN,
   AUTHENTICATE_FROM_TOKEN_SUCCESS,
   AUTHENTICATE_FROM_TOKEN_ERROR,
@@ -35,22 +34,19 @@ export const setUserState = (user) => ({
   },
 });
 
-export const getUserTokenFromLocalstorage = (payload) => ({
-  type: GET_USER_TOKEN_FROM_LOCALSTORAGE,
-  payload,
-});
-
-export const authenticateFromToken = (payload) => ({
+export const authFromToken = (token) => ({
   type: AUTHENTICATE_FROM_TOKEN,
-  payload,
+  payload: {
+    token,
+  },
 });
 
-export const authenticateFromTokenSuccess = (payload) => ({
+export const authFromTokenSuccess = (payload) => ({
   type: AUTHENTICATE_FROM_TOKEN_SUCCESS,
   payload,
 });
 
-export const authenticateFromTokenError = (error) => ({
+export const authFromTokenError = (error) => ({
   type: AUTHENTICATE_FROM_TOKEN_ERROR,
   error,
 });
