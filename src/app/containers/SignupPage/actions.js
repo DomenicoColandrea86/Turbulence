@@ -4,23 +4,17 @@ import {
   SIGNUP_ERROR,
 } from './constants';
 
-export function signupRequest(payload) {
-  return {
-    type: SIGNUP_REQUEST,
-    payload,
-  };
-}
+export const signupRequest = (payload) => ({
+  type: SIGNUP_REQUEST,
+  payload,
+});
 
-export function signupSuccess(payload) {
-  return {
-    type: SIGNUP_SUCCESS,
-    payload,
-  };
-}
+export const signupSuccess = (payload) => ({
+  type: SIGNUP_SUCCESS,
+  payload,
+});
 
-export function signupError(payload) {
-  return {
-    type: SIGNUP_ERROR,
-    payload,
-  };
-}
+export const signupError = (payload) => ({
+  type: SIGNUP_ERROR,
+  payload,
+});

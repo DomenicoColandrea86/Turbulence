@@ -3,53 +3,43 @@
  */
 
 import {
-  AUTHENTICATE_CONFIRM_ACCOUNT_TOKEN,
-  AUTHENTICATE_CONFIRM_ACCOUNT_TOKEN_SUCCESS,
-  AUTHENTICATE_CONFIRM_ACCOUNT_TOKEN_ERROR,
+  AUTH_CONFIRM_ACCOUNT_REQUEST,
+  AUTH_CONFIRM_ACCOUNT_SUCCESS,
+  AUTH_CONFIRM_ACCOUNT_ERROR,
   SET_PASSWORD_REQUEST,
   SET_PASSWORD_SUCCESS,
   SET_PASSWORD_ERROR,
 } from './constants';
 
-export function authenticateConfirmAccountToken(payload) {
-  return {
-    type: AUTHENTICATE_CONFIRM_ACCOUNT_TOKEN,
-    payload,
-  };
-}
+export const authConfirmAccountToken = (token) => ({
+  type: AUTH_CONFIRM_ACCOUNT_REQUEST,
+  payload: {
+    token,
+  },
+});
 
-export function authenticateConfirmAccountTokenSuccess(payload) {
-  return {
-    type: AUTHENTICATE_CONFIRM_ACCOUNT_TOKEN_SUCCESS,
-    payload,
-  };
-}
+export const authConfirmAccountTokenSuccess = (payload) => ({
+  type: AUTH_CONFIRM_ACCOUNT_SUCCESS,
+  payload,
+});
 
-export function authenticateConfirmAccountTokenError(error) {
-  return {
-    type: AUTHENTICATE_CONFIRM_ACCOUNT_TOKEN_ERROR,
-    error,
-  };
-}
+export const authConfirmAccountTokenError = (payload) => ({
+  type: AUTH_CONFIRM_ACCOUNT_ERROR,
+  payload,
+});
 
-export function setPasswordRequest(payload) {
-  return {
-    type: SET_PASSWORD_REQUEST,
-    payload,
-  };
-}
+export const setPasswordRequest = (payload) => ({
+  type: SET_PASSWORD_REQUEST,
+  payload,
+});
 
-export function setPasswordSuccess(payload) {
-  return {
-    type: SET_PASSWORD_SUCCESS,
-    payload,
-  };
-}
+export const setPasswordSuccess = (payload) => ({
+  type: SET_PASSWORD_SUCCESS,
+  payload,
+});
 
-export function setPasswordError(payload) {
-  return {
-    type: SET_PASSWORD_ERROR,
-    payload,
-  };
-}
+export const setPasswordError = (payload) => ({
+  type: SET_PASSWORD_ERROR,
+  payload,
+});
 

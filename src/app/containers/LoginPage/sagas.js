@@ -1,5 +1,6 @@
 
 import { takeLatest } from 'redux-saga';
+import { fork } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 
 import {
@@ -32,13 +33,21 @@ const requestLoginAsync = createRequestSaga({
   ],
 });
 
-// root saga reducer
 const asyncWatchers = [
-  function* asyncLoginFetchWatcher() {
+  function* asyncLoginWatcher() {
     yield [
       yield takeLatest(LOGIN_REQUEST, requestLoginAsync),
     ];
   },
 ];
 
-export default asyncWatchers;
+// root saga reducer
+const rootSaga = function* rootSaga() {
+  yield [
+    ...asyncWatchers.map((watcher) => fork(watcher)),
+  ];
+};
+
+export default [
+  rootSaga,
+];

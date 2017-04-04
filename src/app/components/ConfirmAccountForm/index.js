@@ -50,11 +50,7 @@ function mapDispatchToProps(dispatch, ownProps) {
       const data = Object.assign({}, formData.toJS(), { token });
       const errors = validate(data, schema);
       if (!_.isEmpty(errors)) throw new SubmissionError(errors);
-      return new Promise((resolve, reject) => {
-        dispatch(setPasswordRequest({ data, resolve, reject }));
-      }).catch((error) => {
-        throw new SubmissionError({ _error: error.msg });
-      });
+      dispatch(setPasswordRequest(data));
     },
   };
 }

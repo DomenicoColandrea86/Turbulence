@@ -79,9 +79,14 @@ export default function createRoutes(store) {
       path: '/account',
       name: 'accountStatusPage',
       getComponent(nextState, cb) {
-        require('containers/AccountStatusPage')
-          .then(loadModule(cb))
-          .catch(errorLoading);
+        const importModules = Promise.all([
+          require('containers/AccountStatusPage'),
+        ]);
+        const renderRoute = loadModule(cb);
+        importModules.then(([component]) => {
+          renderRoute(component);
+        });
+        importModules.catch(errorLoading);
       },
     }, {
       path: '/account/accept/:token',

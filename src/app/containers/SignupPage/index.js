@@ -3,7 +3,6 @@
  */
 
 import React from 'react';
-import Promise from 'bluebird';
 import * as _ from 'lodash';
 import { SubmissionError } from 'redux-form/immutable';
 import { connect } from 'react-redux';
@@ -46,11 +45,7 @@ function mapDispatchToProps(dispatch, ownProps) {
     onSubmit(data) {
       const errors = validate(data.toJS(), schema);
       if (!_.isEmpty(errors)) throw new SubmissionError(errors);
-      return new Promise((resolve, reject) => {
-        dispatch(actions.signupRequest({ data, resolve, reject }));
-      }).catch((error) => {
-        throw new SubmissionError({ _error: error.message });
-      });
+      dispatch(actions.signupRequest(data));
     },
   };
 }

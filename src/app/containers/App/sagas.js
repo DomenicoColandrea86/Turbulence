@@ -23,8 +23,8 @@ import { invokeCallback } from '../../common/actions';
 import { createRequestSaga } from '../../common/sagas';
 import { selectNextPathname } from '../../common/selectors/router.selector';
 import { removeItem } from '../../utils/localStorage';
-import { showSuccessNotificationRequest, showErrorNotificationRequest } from '../Notifications/actions';
-import notificationSagas from '../Notifications/sagas';
+import { showErrorNotificationRequest } from '../Notifications/actions';
+import asyncNotificationWatchers from '../Notifications/sagas';
 
 const requestAuthFromTokenAsync = createRequestSaga({
   request: api.auth.reauthenticate,
@@ -33,12 +33,11 @@ const requestAuthFromTokenAsync = createRequestSaga({
   success: [
     (response) => authFromTokenSuccess(response),
     (response) => setUserState(response.user),
-    (response) => showSuccessNotificationRequest(response.message),
     () => push(select(selectNextPathname) ? select(selectNextPathname) : '/'),
   ],
   failure: [
     (error) => authFromTokenError(error),
-    (error) => showErrorNotificationRequest(error.message),
+    () => push('/login'),
   ],
 });
 
@@ -57,12 +56,12 @@ const requestLogoutAsync = createRequestSaga({
 });
 
 const asyncWatchers = [
-  function* asyncAuthFromTokenFetchWatcher() {
+  function* asyncAuthFromTokenWatcher() {
     yield [
       yield takeLatest(AUTHENTICATE_FROM_TOKEN, requestAuthFromTokenAsync),
     ];
   },
-  function* asyncLogoutFetchWatcher() {
+  function* asyncLogoutWatcher() {
     yield [
       yield takeLatest(REMOVE_LOGGED_USER, requestLogoutAsync),
     ];
@@ -73,7 +72,7 @@ const asyncWatchers = [
 const rootSaga = function* rootSaga() {
   yield [
     ...asyncWatchers.map((watcher) => fork(watcher)),
-    ...notificationSagas.map((watcher) => fork(watcher)),
+    ...asyncNotificationWatchers.map((watcher) => fork(watcher)),
   ];
 };
 

@@ -37,7 +37,11 @@ const User = {
 
       // save user to db
       user.save((err, usr) => {
-        if (err) return res.status(409).json({ success: false, message: err.message });
+        if (err) {
+          res.status(409);
+          res.statusMessage = err.message; // eslint-disable-line no-param-reassign
+          return res.send({ success: false, message: err.message });
+        }
         // if no errors delete temp user
         tempUser.remove();
         // create JWT
@@ -45,7 +49,8 @@ const User = {
           expiresIn: config.get('jwt:expires'),
         });
         // return JWT and user
-        return res.status(200).json({ success: true, token, user: usr });
+        res.status(200);
+        return res.send({ success: true, token, user: usr, message: 'Successfully created account.' });
       });
     });
   },

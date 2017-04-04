@@ -7,10 +7,10 @@ import { NOTIFICATION_SHOW_REQUEST } from './constants';
 import { showNotification, hideNotification } from './actions';
 
 export default [
-  watchNotification,
+  asyncNotificationWatcher,
 ];
 
-function* watchNotification() {
+function* asyncNotificationWatcher() {
   yield fork(takeEvery, NOTIFICATION_SHOW_REQUEST, initNotification);
 }
 

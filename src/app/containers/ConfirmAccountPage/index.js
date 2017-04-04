@@ -13,7 +13,7 @@ import ConfirmAccountForm from '../../components/ConfirmAccountForm';
 class ConfirmAccountPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 
   componentWillMount() {
-    this.props.authenticateConfirmAccountToken(this.props.params.token);
+    this.props.authConfirmAccountToken(this.props.params.token);
   }
 
   render() {
@@ -33,7 +33,7 @@ ConfirmAccountPage.propTypes = {
   params: React.PropTypes.shape({
     token: React.PropTypes.string.isRequired,
   }),
-  authenticateConfirmAccountToken: React.PropTypes.func.isRequired,
+  authConfirmAccountToken: React.PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
@@ -51,12 +51,8 @@ function mapDispatchToProps(dispatch, ownProps) {
       ...ownProps.actions,
       ...bindActionCreators(actions, dispatch),
     },
-    authenticateConfirmAccountToken(token) {
-      // handle async tasks with sagas
-      return new Promise((resolve, reject) => {
-        dispatch(actions.authenticateConfirmAccountToken({ token, resolve, reject }));
-      }).then((response) => response)
-        .catch((error) => error);
+    authConfirmAccountToken(token) {
+      dispatch(actions.authConfirmAccountToken(token));
     },
   };
 }
