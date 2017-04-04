@@ -48,7 +48,7 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('loginPage', reducer.default);
-          injectSagas(sagas.default);
+          injectSagas('loginPage', sagas.default);
           renderRoute(component);
         });
 
@@ -68,7 +68,7 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('signupPage', reducer.default);
-          injectSagas(sagas.default);
+          injectSagas('signupPage', sagas.default);
           renderRoute(component);
         });
 
@@ -101,7 +101,7 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('confirmAccountPage', reducer.default);
-          injectSagas(sagas.default);
+          injectSagas('confirmAccountPage', sagas.default);
           renderRoute(component);
         });
 
@@ -121,7 +121,7 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('forgotPasswordPage', reducer.default);
-          injectSagas(sagas.default);
+          injectSagas('forgotPasswordPage', sagas.default);
           renderRoute(component);
         });
 
@@ -140,7 +140,7 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('resetPasswordPage', reducer.default);
-          injectSagas(sagas.default);
+          injectSagas('resetPasswordPage', sagas.default);
           renderRoute(component);
         });
 
@@ -168,7 +168,7 @@ export default function createRoutes(store) {
       const renderRoute = loadModule(cb);
       importModules.then(([reducer, sagas, component]) => {
         injectReducer('app', reducer.default);
-        injectSagas(sagas.default);
+        injectSagas('app', sagas.default);
         renderRoute(component);
       });
 

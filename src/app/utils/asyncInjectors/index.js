@@ -18,6 +18,7 @@ export function checkStore(store) {
     replaceReducer: isFunction,
     runSaga: isFunction,
     asyncReducers: isObject,
+    asyncSagas: isObject,
   };
   invariant(
     conformsTo(store, shape),
@@ -35,7 +36,6 @@ export function isUserAuthorized(store) {
 export function injectAsyncReducer(store, isValid) {
   return function injectReducer(name, asyncReducer) {
     if (!isValid) checkStore(store);
-
     invariant(
       isString(name) && !isEmpty(name) && isFunction(asyncReducer),
       '(app/utils...) injectAsyncReducer: Expected `asyncReducer` to be a reducer function'
@@ -52,8 +52,15 @@ export function injectAsyncReducer(store, isValid) {
  * Inject an asynchronously loaded saga
  */
 export function injectAsyncSagas(store, isValid) {
-  return function injectSagas(sagas) {
+  return function injectSagas(name, sagas) {
     if (!isValid) checkStore(store);
+
+    if (store.asyncSagas[name]) return;
+
+    sagas.map((saga) => {
+      store.asyncSagas[name] = saga; // eslint-disable-line no-param-reassign
+      return saga;
+    });
 
     invariant(
       Array.isArray(sagas),
