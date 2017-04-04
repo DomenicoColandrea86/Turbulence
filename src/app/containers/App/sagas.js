@@ -27,7 +27,7 @@ import { showErrorNotificationRequest } from '../Notifications/actions';
 import asyncNotificationWatchers from '../Notifications/sagas';
 
 const requestAuthFromTokenAsync = createRequestSaga({
-  request: api.auth.reauthenticate,
+  request: api.user.reauthenticate,
   key: 'reauthenticate',
   cancel: REMOVE_LOGGED_USER,
   success: [
@@ -42,7 +42,7 @@ const requestAuthFromTokenAsync = createRequestSaga({
 });
 
 const requestLogoutAsync = createRequestSaga({
-  request: api.auth.logout,
+  request: api.user.logout,
   key: 'logout',
   success: [
     () => removeLoggedUser(),

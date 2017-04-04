@@ -1,14 +1,11 @@
-/**
- * ResetPasswordPage reducer
- */
 
 import {
   RESET_PASSWORD_REQUEST,
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_ERROR,
-  AUTHENTICATE_RESET_PASSWORD_TOKEN,
-  AUTHENTICATE_RESET_PASSWORD_TOKEN_SUCCESS,
-  AUTHENTICATE_RESET_PASSWORD_TOKEN_ERROR,
+  AUTH_RESET_PASSWORD_TOKEN,
+  AUTH_RESET_PASSWORD_TOKEN_SUCCESS,
+  AUTH_RESET_PASSWORD_TOKEN_ERROR,
 } from './constants';
 
 const initialState = {};
@@ -33,19 +30,19 @@ export default function resetPasswordPageReducer(state = initialState, action) {
         error: action.error,
       };
 
-    case AUTHENTICATE_RESET_PASSWORD_TOKEN:
+    case AUTH_RESET_PASSWORD_TOKEN:
+      return {
+        ...state,
+        token: action.payload.token,
+      };
+
+    case AUTH_RESET_PASSWORD_TOKEN_SUCCESS:
       return {
         ...state,
         payload: action.payload,
       };
 
-    case AUTHENTICATE_RESET_PASSWORD_TOKEN_SUCCESS:
-      return {
-        ...state,
-        payload: action.payload,
-      };
-
-    case AUTHENTICATE_RESET_PASSWORD_TOKEN_ERROR:
+    case AUTH_RESET_PASSWORD_TOKEN_ERROR:
       return {
         ...state,
         error: action.error,

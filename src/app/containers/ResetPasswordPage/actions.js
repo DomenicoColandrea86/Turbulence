@@ -1,54 +1,41 @@
-/**
- * ResetPasswordPage actions
- */
 
 import {
   RESET_PASSWORD_REQUEST,
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_ERROR,
-  AUTHENTICATE_RESET_PASSWORD_TOKEN,
-  AUTHENTICATE_RESET_PASSWORD_TOKEN_SUCCESS,
-  AUTHENTICATE_RESET_PASSWORD_TOKEN_ERROR,
+  AUTH_RESET_PASSWORD_TOKEN,
+  AUTH_RESET_PASSWORD_TOKEN_SUCCESS,
+  AUTH_RESET_PASSWORD_TOKEN_ERROR,
 } from './constants';
 
-export function authenticateResetPasswordToken(payload) {
-  return {
-    type: AUTHENTICATE_RESET_PASSWORD_TOKEN,
-    payload,
-  };
-}
+export const authResetPasswordToken = (token) => ({
+  type: AUTH_RESET_PASSWORD_TOKEN,
+  payload: {
+    token,
+  },
+});
 
-export function authenticateResetPasswordTokenSuccess(payload) {
-  return {
-    type: AUTHENTICATE_RESET_PASSWORD_TOKEN_SUCCESS,
-    payload,
-  };
-}
+export const authResetPasswordTokenSuccess = (payload) => ({
+  type: AUTH_RESET_PASSWORD_TOKEN_SUCCESS,
+  payload,
+});
 
-export function authenticateResetPasswordTokenError(error) {
-  return {
-    type: AUTHENTICATE_RESET_PASSWORD_TOKEN_ERROR,
-    error,
-  };
-}
+export const authResetPasswordTokenError = (error) => ({
+  type: AUTH_RESET_PASSWORD_TOKEN_ERROR,
+  error,
+});
 
-export function resetPasswordRequest(payload) {
-  return {
-    type: RESET_PASSWORD_REQUEST,
-    payload,
-  };
-}
+export const resetPasswordRequest = (payload) => ({
+  type: RESET_PASSWORD_REQUEST,
+  payload,
+});
 
-export function resetPasswordSuccess(payload) {
-  return {
-    type: RESET_PASSWORD_SUCCESS,
-    payload,
-  };
-}
+export const resetPasswordSuccess = (payload) => ({
+  type: RESET_PASSWORD_SUCCESS,
+  payload,
+});
 
-export function resetPasswordError(payload) {
-  return {
-    type: RESET_PASSWORD_ERROR,
-    payload,
-  };
-}
+export const resetPasswordError = (payload) => ({
+  type: RESET_PASSWORD_ERROR,
+  payload,
+});

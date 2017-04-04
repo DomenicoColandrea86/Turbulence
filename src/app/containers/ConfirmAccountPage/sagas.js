@@ -24,7 +24,7 @@ import { setItem } from '../../utils/localStorage';
 import { showSuccessNotificationRequest, showErrorNotificationRequest } from '../Notifications/actions';
 
 const requestAuthConfirmAccountAsync = createRequestSaga({
-  request: api.auth.authConfirmAccount,
+  request: api.user.authConfirmAccount,
   key: 'authConfirmAccount',
   cancel: REMOVE_LOGGED_USER,
   success: [
@@ -37,7 +37,7 @@ const requestAuthConfirmAccountAsync = createRequestSaga({
 });
 
 const requestSetPasswordAsync = createRequestSaga({
-  request: api.auth.create,
+  request: api.user.create,
   key: 'setPassword',
   cancel: REMOVE_LOGGED_USER,
   success: [

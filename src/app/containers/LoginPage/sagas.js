@@ -17,7 +17,7 @@ import { showSuccessNotificationRequest, showErrorNotificationRequest } from '..
 import { setItem } from '../../utils/localStorage';
 
 const requestLoginAsync = createRequestSaga({
-  request: api.auth.login,
+  request: api.user.login,
   key: 'login',
   cancel: REMOVE_LOGGED_USER,
   success: [

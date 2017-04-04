@@ -8,11 +8,6 @@ function selectResetPasswordPageDomain(state) {
 }
 
 /**
- * Other specific selectors
- */
-
-
-/**
  * Public selectors used by ResetPasswordPage
  */
 export const selectResetPasswordPage = createSelector(

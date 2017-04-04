@@ -43,7 +43,7 @@ const auth = {
   },
 
   /**
-   * Signup workflow
+   * Authenticate confirm account token
    */
   authConfirmAccount({ token }) {
     return fetchJson('/api/v1/user/authenticateConfirmAccountToken', {
@@ -52,8 +52,34 @@ const auth = {
     });
   },
 
+  /**
+   * Create user
+   */
   create({ password, token }) {
     return fetchJson('/api/v1/user', {
+      method: 'POST',
+      body: JSON.stringify({
+        password,
+        token,
+      }),
+    });
+  },
+
+  /**
+   * Authenticate reset password token
+   */
+  authResetPassword({ token }) {
+    return fetchJson('/api/v1/user/authenticateResetPasswordToken', {
+      method: 'POST',
+      body: JSON.stringify({ token }),
+    });
+  },
+
+  /**
+   * Authenticate reset password token
+   */
+  resetPassword({ password, token }) {
+    return fetchJson('/api/v1/user/resetPassword', {
       method: 'POST',
       body: JSON.stringify({
         password,

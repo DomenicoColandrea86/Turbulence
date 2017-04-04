@@ -11,7 +11,7 @@ import { createRequestSaga } from '../../common/sagas';
 import { REMOVE_LOGGED_USER } from '../../containers/App/constants';
 
 const requestSignupAsync = createRequestSaga({
-  request: api.auth.signup,
+  request: api.user.signup,
   key: 'signup',
   cancel: REMOVE_LOGGED_USER,
   success: [
