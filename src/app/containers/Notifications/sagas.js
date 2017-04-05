@@ -1,20 +1,11 @@
-/* eslint-disable no-constant-condition, consistent-return */
 import { v4 } from 'uuid';
 import { call, fork, put } from 'redux-saga/effects';
-import { takeEvery, delay } from 'redux-saga';
+import { takeLatest, delay } from 'redux-saga';
 
 import { NOTIFICATION_SHOW_REQUEST } from './constants';
 import { showNotification, hideNotification } from './actions';
 
-export default [
-  asyncNotificationWatcher,
-];
-
-function* asyncNotificationWatcher() {
-  yield fork(takeEvery, NOTIFICATION_SHOW_REQUEST, initNotification);
-}
-
-function* initNotification(action) {
+function* requestNotificationAsync(action) {
   try {
     const notification = Object.assign({}, action.notification, { id: v4() });
     yield put(showNotification(notification));
@@ -24,3 +15,22 @@ function* initNotification(action) {
     console.error(error); // eslint-disable-line no-console
   }
 }
+
+const asyncWatchers = [
+  function* asyncNotificationWatcher() {
+    yield [
+      yield takeLatest(NOTIFICATION_SHOW_REQUEST, requestNotificationAsync),
+    ];
+  },
+];
+
+// root saga reducer
+const rootSaga = function* rootSaga() {
+  yield [
+    ...asyncWatchers.map((watcher) => fork(watcher)),
+  ];
+};
+
+export default [
+  rootSaga,
+];
