@@ -21,7 +21,7 @@ import { showSuccessNotificationRequest, showErrorNotificationRequest } from '..
 
 const requestForgotPasswordAsync = createRequestSaga({
   request: api.user.forgotPassword,
-  key: 'authConfirmAccount',
+  key: 'forgotPassword',
   cancel: REMOVE_LOGGED_USER,
   success: [
     (response) => forgotPasswordSuccess(response),

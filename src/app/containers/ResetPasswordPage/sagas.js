@@ -25,7 +25,7 @@ import { showSuccessNotificationRequest, showErrorNotificationRequest } from '..
 
 const requestAuthResetPasswordAsync = createRequestSaga({
   request: api.user.authResetPassword,
-  key: 'authConfirmAccount',
+  key: 'authResetPassword',
   cancel: REMOVE_LOGGED_USER,
   success: [
     (response) => authResetPasswordTokenSuccess(response),
@@ -38,7 +38,7 @@ const requestAuthResetPasswordAsync = createRequestSaga({
 
 const requestResetPasswordAsync = createRequestSaga({
   request: api.user.resetPassword,
-  key: 'setPassword',
+  key: 'resetPassword',
   cancel: REMOVE_LOGGED_USER,
   success: [
     (response) => resetPasswordSuccess(response),

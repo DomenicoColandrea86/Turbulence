@@ -23,7 +23,7 @@ const AuthorizedNav = function AuthorizedNav({ user, logout }) {
   return (
     <ul className="navbar-nav">
       <li className="nav-item mr-4">
-        <div className={styles.greeting}>Signed in as <b>{user.firstName}</b></div>
+        <div className={styles.greeting}>Signed in as <b className="text-capitalize">{user.firstName}</b></div>
       </li>
       <li className="nav-item">
         <button onClick={logout} className={styles.logout}>Logout</button>
