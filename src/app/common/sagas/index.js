@@ -39,8 +39,8 @@ export const createRequestSaga = ({ request, key, start, stop, success, failure,
     yield put(markRequestPending(requestKey));
     try {
       // this is surely Error exception, assume as a request failed
-      if (!request) throw new Error('Api method not found!!!');
-      // we do not wait forever for whatever request !!!
+      if (!request) throw new Error('Api method not found!');
+      // we do not wait forever for a request
       // timeout is 0 mean default timeout, so default is 0 in case user input 0
       const raceOptions = {
         data: call(request, ...args),
@@ -52,7 +52,7 @@ export const createRequestSaga = ({ request, key, start, stop, success, failure,
       const { data, isTimeout, cancelRet } = yield race(raceOptions); // eslint-disable-line redux-saga/no-yield-in-race
 
       if (isTimeout) {
-        throw new Error(`Api method is timeout after ${timeout} ms!!!`);
+        throw new Error(`Api method timeout after ${timeout} ms!`);
       } else if (cancelRet) {
         // callback on cancelled
         if (cancelled) yield cancelled.map((actionCreator) => put(actionCreator(cancelRet, action)));

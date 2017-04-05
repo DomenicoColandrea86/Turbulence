@@ -1,12 +1,13 @@
-/**
- * ConfirmAccountPage
- */
 
 import React from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { SubmissionError } from 'redux-form/immutable';
 
 import * as actions from './actions';
+import schema from './schema';
+import validate from '../../utils/validation';
 import { selectConfirmAccountPage } from './selectors';
 import ConfirmAccountForm from '../../components/ConfirmAccountForm';
 
@@ -53,6 +54,13 @@ function mapDispatchToProps(dispatch, ownProps) {
     },
     authConfirmAccountToken(token) {
       dispatch(actions.authConfirmAccountToken(token));
+    },
+    onSubmit(formData) {
+      const token = ownProps.params.token;
+      const data = Object.assign({}, formData.toJS(), { token });
+      const errors = validate(data, schema);
+      if (!_.isEmpty(errors)) throw new SubmissionError(errors);
+      dispatch(actions.setPasswordRequest(data));
     },
   };
 }

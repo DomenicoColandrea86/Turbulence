@@ -1,15 +1,8 @@
-/*
-* ConfirmAccountForm
-*/
 
 import React from 'react';
-import * as _ from 'lodash';
 import { connect } from 'react-redux';
-import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
+import { Field, reduxForm } from 'redux-form/immutable';
 
-import schema from './schema';
-import validate from '../../utils/validation';
-import { setPasswordRequest } from '../../containers/ConfirmAccountPage/actions';
 import * as styles from './styles.css';
 
 const RenderField = ({ id, input, label, type, meta: { touched, error } }) => (
@@ -21,9 +14,9 @@ const RenderField = ({ id, input, label, type, meta: { touched, error } }) => (
   </div>
 );
 
-const ConfirmAccountForm = function ConfirmAccountForm({ error, handleSubmit, submitting }) {
+const ConfirmAccountForm = function ConfirmAccountForm({ onSubmit, handleSubmit, submitting, error }) {
   return (
-    <form className={styles.login__form} onSubmit={handleSubmit}>
+    <form className={styles.login__form} onSubmit={handleSubmit(onSubmit)}>
       <Field name="password" id="password" type="password" component={RenderField} label="Password" />
       <Field name="confirmPassword" id="confirmPassword" type="password" component={RenderField} label="Confirm Password" />
       <div>
@@ -34,31 +27,11 @@ const ConfirmAccountForm = function ConfirmAccountForm({ error, handleSubmit, su
   );
 };
 
-function mapStateToProps(state, ownProps) {
-  return {
-    state: ownProps.state,
-  };
-}
-
-function mapDispatchToProps(dispatch, ownProps) {
-  return {
-    actions: {
-      ...ownProps.actions,
-    },
-    onSubmit(formData) {
-      const token = ownProps.params.token;
-      const data = Object.assign({}, formData.toJS(), { token });
-      const errors = validate(data, schema);
-      if (!_.isEmpty(errors)) throw new SubmissionError(errors);
-      dispatch(setPasswordRequest(data));
-    },
-  };
-}
-
 ConfirmAccountForm.propTypes = {
-  error: React.PropTypes.string,
+  onSubmit: React.PropTypes.func.isRequired,
   handleSubmit: React.PropTypes.func.isRequired,
   submitting: React.PropTypes.bool.isRequired,
+  error: React.PropTypes.string,
 };
 
 RenderField.propTypes = {
@@ -72,6 +45,4 @@ RenderField.propTypes = {
   }),
 };
 
-export default (connect(
-  mapStateToProps, mapDispatchToProps)(
-  reduxForm({ form: 'confirmAccountForm' })(ConfirmAccountForm)));
+export default (connect()(reduxForm({ form: 'confirmAccountForm' })(ConfirmAccountForm)));

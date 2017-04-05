@@ -3,14 +3,9 @@
 */
 
 import React from 'react';
-import * as _ from 'lodash';
-import Promise from 'bluebird';
 import { connect } from 'react-redux';
-import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
+import { Field, reduxForm } from 'redux-form/immutable';
 
-import schema from './schema';
-import validate from '../../utils/validation';
-import { forgotPasswordRequest } from '../../containers/ForgotPasswordPage/actions';
 import * as styles from './styles.css';
 
 
@@ -23,9 +18,9 @@ const RenderField = ({ id, input, label, type, meta: { touched, error } }) => (
   </div>
 );
 
-const ForgotPasswordForm = function ForgotPasswordForm({ error, handleSubmit, submitting }) {
+const ForgotPasswordForm = function ForgotPasswordForm({ onSubmit, handleSubmit, submitting, error }) {
   return (
-    <form className={styles.login__form} onSubmit={handleSubmit}>
+    <form className={styles.login__form} onSubmit={handleSubmit(onSubmit)}>
       <Field name="email" id="email" type="email" component={RenderField} label="Email" />
       <div>
         <button className="btn btn-primary btn-block" type="submit" disabled={submitting}>Reset Password</button>
@@ -35,33 +30,11 @@ const ForgotPasswordForm = function ForgotPasswordForm({ error, handleSubmit, su
   );
 };
 
-function mapStateToProps(state, ownProps) {
-  return {
-    state: ownProps.state,
-  };
-}
-
-function mapDispatchToProps(dispatch, ownProps) {
-  return {
-    actions: {
-      ...ownProps.actions,
-    },
-    onSubmit(data) {
-      const errors = validate(data.toJS(), schema);
-      if (!_.isEmpty(errors)) throw new SubmissionError(errors);
-      return new Promise((resolve, reject) => {
-        dispatch(forgotPasswordRequest({ data, resolve, reject }));
-      }).catch((error) => {
-        throw new SubmissionError({ _error: error.msg });
-      });
-    },
-  };
-}
-
 ForgotPasswordForm.propTypes = {
-  error: React.PropTypes.string,
+  onSubmit: React.PropTypes.func.isRequired,
   handleSubmit: React.PropTypes.func.isRequired,
   submitting: React.PropTypes.bool.isRequired,
+  error: React.PropTypes.string,
 };
 
 RenderField.propTypes = {
@@ -75,6 +48,4 @@ RenderField.propTypes = {
   }),
 };
 
-export default (connect(
-  mapStateToProps, mapDispatchToProps)(
-  reduxForm({ form: 'forgotPasswordForm' })(ForgotPasswordForm)));
+export default (connect()(reduxForm({ form: 'forgotPasswordForm' })(ForgotPasswordForm)));

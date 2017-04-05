@@ -23,7 +23,7 @@ import { invokeCallback } from '../../common/actions';
 import { createRequestSaga } from '../../common/sagas';
 import { selectNextPathname } from '../../common/selectors/router.selector';
 import { removeItem } from '../../utils/localStorage';
-import { showErrorNotificationRequest } from '../Notifications/actions';
+import { showSuccessNotificationRequest, showErrorNotificationRequest } from '../Notifications/actions';
 import asyncNotificationWatchers from '../Notifications/sagas';
 
 const requestAuthFromTokenAsync = createRequestSaga({
@@ -48,6 +48,7 @@ const requestLogoutAsync = createRequestSaga({
     () => removeLoggedUser(),
     () => setUserState(null),
     () => invokeCallback(removeItem('token')),
+    () => showSuccessNotificationRequest('logged out!'),
     () => push('/login'),
   ],
   failure: [

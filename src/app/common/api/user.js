@@ -1,6 +1,6 @@
 import { fetchJson } from '../../utils/fetch';
 
-const auth = {
+const user = {
   // Logs a user in
   login({ email, password }) {
     return fetchJson('/api/v1/user/authenticate', {
@@ -87,6 +87,16 @@ const auth = {
       }),
     });
   },
+
+  /**
+   * Forgot password
+   */
+  forgotPassword({ email }) {
+    return fetchJson('/api/v1/user/forgotPassword', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    });
+  },
 };
 
-export default auth;
+export default user;

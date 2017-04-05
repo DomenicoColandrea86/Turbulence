@@ -3,7 +3,6 @@
  */
 
 import {
-  DEFAULT_ACTION,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
   FORGOT_PASSWORD_ERROR,
@@ -31,8 +30,6 @@ export default function forgotPasswordPageReducer(state = initialState, action) 
         error: action.error,
       };
 
-    case DEFAULT_ACTION:
-      return state;
     default:
       return state;
   }

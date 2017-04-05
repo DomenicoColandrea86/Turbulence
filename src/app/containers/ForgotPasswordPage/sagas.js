@@ -1,61 +1,55 @@
-/**
- * ResetPasswordPage Sagas
- */
 
-/* eslint-disable no-constant-condition, consistent-return */
-import { take, call, put, fork } from 'redux-saga/effects';
-import request from '../../utils/request';
-import { removeItem } from '../../utils/localStorage';
+import { push } from 'react-router-redux';
+import { takeLatest } from 'redux-saga';
+import { fork } from 'redux-saga/effects';
 
 import {
   FORGOT_PASSWORD_REQUEST,
-  FORGOT_PASSWORD_SUCCESS,
 } from './constants';
+
 import {
   forgotPasswordSuccess,
   forgotPasswordError,
 } from './actions';
 
-// Bootstrap sagas
-export default [
-  forgotPassword,
+import api from '../../common/api';
+import { invokeCallback } from '../../common/actions';
+import { REMOVE_LOGGED_USER } from '../../containers/App/constants';
+import { createRequestSaga } from '../../common/sagas';
+import { removeItem } from '../../utils/localStorage';
+import { showSuccessNotificationRequest, showErrorNotificationRequest } from '../Notifications/actions';
+
+const requestForgotPasswordAsync = createRequestSaga({
+  request: api.user.forgotPassword,
+  key: 'authConfirmAccount',
+  cancel: REMOVE_LOGGED_USER,
+  success: [
+    (response) => forgotPasswordSuccess(response),
+    () => invokeCallback(removeItem('token')),
+    (response) => showSuccessNotificationRequest(response.message),
+  ],
+  failure: [
+    (error) => forgotPasswordError(error),
+    (error) => showErrorNotificationRequest(error.message),
+    () => push('/login'),
+  ],
+});
+
+const asyncWatchers = [
+  function* asyncForgotPasswordWatcher() {
+    yield [
+      yield takeLatest(FORGOT_PASSWORD_REQUEST, requestForgotPasswordAsync),
+    ];
+  },
 ];
 
-function* forgotPassword() {
-  // listen for the FORGOT_PASSWORD_REQUEST action
-  const { payload: { data, resolve, reject } } = yield take(FORGOT_PASSWORD_REQUEST);
-  try {
-    // remove jwt token from localstorage
-    yield call(removeItem, 'token');
-    // execute the makeForgotPasswordRequest task asynchronously
-    yield fork(makeForgotPasswordRequest, data, resolve, reject);
-    // listen for the FORGOT_PASSWORD_SUCCESS action
-    const { payload } = yield take([FORGOT_PASSWORD_SUCCESS]);
-    // resolve promise
-    yield call(resolve, payload);
-  } catch (error) {
-    // dispatch FORGOT_PASSWORD_ERROR action
-    yield put(forgotPasswordError(error));
-    yield call(reject, error);
-  }
-}
+// root saga reducer
+const rootSaga = function* rootSaga() {
+  yield [
+    ...asyncWatchers.map((watcher) => fork(watcher)),
+  ];
+};
 
-function* makeForgotPasswordRequest(data, resolve, reject) {
-  const { email } = data.toJS();
-  try {
-    // send a post request with the login credentials
-    const response = yield call(request, '/api/v1/user/forgotPassword', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
-      mode: 'cors',
-    });
-    // dispatch FORGOT_PASSWORD_SUCCESS action
-    yield put(forgotPasswordSuccess(response));
-  } catch (err) {
-    // dispatch FORGOT_PASSWORD_ERROR action
-    yield put(forgotPasswordError(err));
-    // reject error
-    yield call(reject, err);
-  }
-}
+export default [
+  rootSaga,
+];
