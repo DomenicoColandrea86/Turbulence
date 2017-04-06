@@ -17,8 +17,7 @@ import { bindActionCreators } from 'redux';
 import { createStructuredSelector } from 'reselect';
 
 import * as actions from './actions';
-import { makeSelectUser } from './selectors';
-import { makeSelectNotifications } from '../Notifications/selectors';
+import { makeSelectUser, makeSelectNotifications } from './selectors';
 import Header from '../../components/Header';
 import Notifications from '../Notifications';
 import { getItem } from '../../utils/localStorage';

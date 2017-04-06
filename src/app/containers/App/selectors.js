@@ -21,11 +21,17 @@ const selectApp = (state) => state.get('app');
 
 const makeSelectUser = () => createSelector(
   selectApp,
-  (appState) => appState.user
+  (appState) => appState.get('user'),
+);
+
+const makeSelectNotifications = () => createSelector(
+  selectApp,
+  (appState) => appState.get('notifications').toJS(),
 );
 
 export {
   selectApp,
   makeSelectUser,
+  makeSelectNotifications,
   makeSelectLocationState,
 };
