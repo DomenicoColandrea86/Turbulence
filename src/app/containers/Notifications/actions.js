@@ -9,57 +9,45 @@ import {
   NOTIFICATION_SHOW_REQUEST,
 } from './constants';
 
-export function showNotification(notification) {
-  return {
-    type: NOTIFICATION_SHOW,
-    notification,
-  };
-}
+export const showNotification = (notification) => ({
+  type: NOTIFICATION_SHOW,
+  notification,
+});
 
-export function hideNotification(notification) {
-  return {
-    type: NOTIFICATION_HIDE,
-    notification,
-  };
-}
+export const hideNotification = (notification) => ({
+  type: NOTIFICATION_HIDE,
+  notification,
+});
 
-export function showSuccessNotificationRequest(message) {
-  return {
-    type: NOTIFICATION_SHOW_REQUEST,
-    notification: {
-      message,
-      type: NOTIFICATION_TYPE_SUCCESS,
-    },
-  };
-}
+export const showSuccessNotificationRequest = (message) => ({
+  type: NOTIFICATION_SHOW_REQUEST,
+  notification: {
+    message,
+    type: NOTIFICATION_TYPE_SUCCESS,
+  },
+});
 
-export function showErrorNotificationRequest(message) {
-  return {
-    type: NOTIFICATION_SHOW_REQUEST,
-    notification: {
-      message,
-      type: NOTIFICATION_TYPE_ERROR,
-    },
-  };
-}
+export const showErrorNotificationRequest = (message) => ({
+  type: NOTIFICATION_SHOW_REQUEST,
+  notification: {
+    message,
+    type: NOTIFICATION_TYPE_ERROR,
+  },
+});
 
-export function showInfoNotificationRequest(message) {
-  return {
-    type: NOTIFICATION_SHOW_REQUEST,
-    notification: {
-      message,
-      type: NOTIFICATION_TYPE_INFO,
-    },
-  };
-}
+export const showInfoNotificationRequest = (message) => ({
+  type: NOTIFICATION_SHOW_REQUEST,
+  notification: {
+    message,
+    type: NOTIFICATION_TYPE_INFO,
+  },
+});
 
-export function showWarningNotificationRequest(message) {
-  return {
-    type: NOTIFICATION_SHOW_REQUEST,
-    notification: {
-      message,
-      type: NOTIFICATION_TYPE_WARNING,
-    },
-  };
-}
+export const showWarningNotificationRequest = (message) => ({
+  type: NOTIFICATION_SHOW_REQUEST,
+  notification: {
+    message,
+    type: NOTIFICATION_TYPE_WARNING,
+  },
+});
 

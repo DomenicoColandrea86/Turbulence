@@ -1,6 +1,4 @@
-/**
- * ConfirmAccountPage reducer
- */
+import { fromJS } from 'immutable';
 
 import {
   SET_PASSWORD_REQUEST,
@@ -11,44 +9,27 @@ import {
   AUTH_CONFIRM_ACCOUNT_ERROR,
 } from './constants';
 
-const initialState = {};
+const initialState = fromJS({});
 
 export default function confirmAccountPage(state = initialState, action) {
   switch (action.type) {
     case SET_PASSWORD_REQUEST:
-      return {
-        ...state,
-        payload: action.payload,
-      };
+      return state.set('payload', action.payload);
 
     case SET_PASSWORD_SUCCESS:
-      return {
-        ...state,
-        payload: action.payload,
-      };
+      return state.set('payload', action.payload);
 
     case SET_PASSWORD_ERROR:
-      return {
-        ...state,
-        error: action.error,
-      };
+      return state.set('error', action.error);
+
     case AUTH_CONFIRM_ACCOUNT_REQUEST:
-      return {
-        ...state,
-        token: action.payload.token,
-      };
+      return state.set('token', action.payload.token);
 
     case AUTH_CONFIRM_ACCOUNT_SUCCESS:
-      return {
-        ...state,
-        payload: action.payload,
-      };
+      return state.set('payload', action.payload);
 
     case AUTH_CONFIRM_ACCOUNT_ERROR:
-      return {
-        ...state,
-        error: action.error,
-      };
+      return state.set('error', action.error);
 
     default:
       return state;

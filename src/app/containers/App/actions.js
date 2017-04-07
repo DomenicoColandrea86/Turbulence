@@ -18,9 +18,7 @@ export const setLoadingState = (loading) => ({
 
 export const setErrorState = (error = new Error('Something went wrong.')) => ({
   type: SET_ERROR_STATE,
-  payload: {
-    error,
-  },
+  error,
 });
 
 export const removeLoggedUser = () => ({

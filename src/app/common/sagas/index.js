@@ -10,7 +10,7 @@ import {
   forwardTo,
 } from '../actions';
 
-import { setUserState, removeLoggedUser } from '../../containers/App/actions';
+import { setUserState, removeLoggedUser, setLoadingState } from '../../containers/App/actions';
 
 import {
   API_TIMEOUT,
@@ -37,6 +37,7 @@ export const createRequestSaga = ({ request, key, start, stop, success, failure,
     if (start) yield start.map((actionCreator) => put(actionCreator()));
     // mark pending
     yield put(markRequestPending(requestKey));
+    yield put(setLoadingState(true));
     try {
       // this is surely Error exception, assume as a request failed
       if (!request) throw new Error('Api method not found!');
@@ -58,10 +59,12 @@ export const createRequestSaga = ({ request, key, start, stop, success, failure,
         if (cancelled) yield cancelled.map((actionCreator) => put(actionCreator(cancelRet, action)));
         // mark cancelled request
         yield put(markRequestCancelled(cancelRet, requestKey));
+        yield put(setLoadingState(false));
       } else {
         // action creator on success
         if (success) yield success.map((actionCreator) => put(actionCreator(data, action)));
         yield put(markRequestSuccess(requestKey));
+        yield put(setLoadingState(false));
       }
     } catch (reason) {
       // unauthorized
@@ -74,6 +77,7 @@ export const createRequestSaga = ({ request, key, start, stop, success, failure,
       // anyway, we should treat this as error to log
       if (failure) yield failure.map((actionCreator) => put(actionCreator(reason, action)));
       yield put(markRequestFailed(reason, requestKey));
+      yield put(setLoadingState(false));
     } finally {
       if (stop) yield stop.map((actionCreator) => put(actionCreator(stop, action)));
     }

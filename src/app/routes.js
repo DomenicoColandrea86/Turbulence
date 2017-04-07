@@ -23,7 +23,7 @@ export default function createRoutes(store) {
       name: 'home',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          require('containers/HomePage'),
+          require('./containers/HomePage'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -80,7 +80,7 @@ export default function createRoutes(store) {
       name: 'accountStatusPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          require('containers/AccountStatusPage'),
+          require('./containers/AccountStatusPage'),
         ]);
         const renderRoute = loadModule(cb);
         importModules.then(([component]) => {
@@ -150,7 +150,7 @@ export default function createRoutes(store) {
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {
-        require('containers/NotFoundPage')
+        require('./containers/NotFoundPage')
           .then(loadModule(cb))
           .catch(errorLoading);
       },
@@ -162,8 +162,8 @@ export default function createRoutes(store) {
     getComponent(nextState, cb) {
       const importModules = Promise.all([
         require('./containers/App/reducer'),
-        require('containers/App/sagas'),
-        require('containers/App'),
+        require('./containers/App/sagas'),
+        require('./containers/App'),
       ]);
       const renderRoute = loadModule(cb);
       importModules.then(([reducer, sagas, component]) => {

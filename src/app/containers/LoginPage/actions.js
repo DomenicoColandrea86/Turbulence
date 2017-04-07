@@ -1,7 +1,3 @@
-/**
- * LoginPage actions
- */
-
 import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
