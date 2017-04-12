@@ -1,6 +1,5 @@
 import 'isomorphic-fetch';
 
-// default api_base for all request
 import {
   API_BASE,
 } from '../../common/constants';

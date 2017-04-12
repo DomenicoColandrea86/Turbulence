@@ -1,21 +1,12 @@
 import { createSelector } from 'reselect';
 
-/**
- * Direct selector to the SignupPage state domain
- */
-function selectSignupPageDomain(state) {
-  return state.signupPage;
-}
+const selectSignupPageDomain = (state) => state.get('signupPage');
 
-/**
- * Other specific selectors
- */
-
-
-/**
- * Public selectors used by SignupPage
- */
-export const selectSignupPage = createSelector(
+const selectSignupPage = createSelector(
   selectSignupPageDomain,
   (substate) => substate
 );
+
+export {
+  selectSignupPage,
+};

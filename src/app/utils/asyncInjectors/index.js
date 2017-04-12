@@ -26,10 +26,6 @@ export function checkStore(store) {
   );
 }
 
-export function isUserAuthorized(store) {
-  return store.getState().toJS().app.user && store.getState().toJS().app.user.isAuthorized;
-}
-
 /**
  * Inject an asynchronously loaded reducer
  */
@@ -108,3 +104,6 @@ export function getAsyncInjectors(store) {
     redirectHome: redirectHome(store),
   };
 }
+
+// check user authorized flag
+const isUserAuthorized = (store) => store.getState().getIn(['app', 'user']).isAuthorized;

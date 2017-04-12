@@ -7,10 +7,12 @@ import {
   markRequestSuccess,
   markRequestCancelled,
   markRequestFailed,
-  forwardTo,
 } from '../actions';
 
-import { setUserState, removeLoggedUser, setLoadingState } from '../../containers/App/actions';
+import {
+  removeLoggedUser,
+  setLoadingState,
+} from '../../containers/App/actions';
 
 import {
   API_TIMEOUT,
@@ -71,8 +73,6 @@ export const createRequestSaga = ({ request, key, start, stop, success, failure,
       if (reason.status === 401) {
         // call logout user
         yield put(removeLoggedUser());
-        yield put(setUserState(false));
-        yield put(forwardTo('/login'));
       }
       // anyway, we should treat this as error to log
       if (failure) yield failure.map((actionCreator) => put(actionCreator(reason, action)));

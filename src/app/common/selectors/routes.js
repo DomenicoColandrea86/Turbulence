@@ -1,21 +1,12 @@
 import { createSelector } from 'reselect';
 import { get } from 'lodash';
 
-/**
- * Direct selector to the routing state domain
- */
-function selectRoutingDomain(state) {
-  return state.route;
-}
+const selectRoutingDomain = (state) => state.get('route');
 
-/**
- * Other specific selectors
- */
-export const selectNextPathname = createSelector(
+const selectNextPathname = createSelector(
   selectRoutingDomain,
   (substate) => {
     let nextPathname = false;
-
     if (get(substate, 'locationBeforeTransitions.state.nextPathname')) {
       nextPathname = substate.locationBeforeTransitions.state.nextPathname;
     }
@@ -24,7 +15,12 @@ export const selectNextPathname = createSelector(
   }
 );
 
-export const selectRouting = createSelector(
+const selectRouting = createSelector(
   selectRoutingDomain,
   (substate) => substate
 );
+
+export {
+  selectNextPathname,
+  selectRouting,
+};

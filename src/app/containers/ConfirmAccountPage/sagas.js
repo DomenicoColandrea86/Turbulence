@@ -16,6 +16,7 @@ import {
 } from './actions';
 
 import api from '../../common/api';
+import Models from '../../common/models';
 import { invokeCallback } from '../../common/actions';
 import { setUserState } from '../App/actions';
 import { REMOVE_LOGGED_USER } from '../../containers/App/constants';
@@ -42,7 +43,7 @@ const requestSetPasswordAsync = createRequestSaga({
   cancel: REMOVE_LOGGED_USER,
   success: [
     (response) => setPasswordSuccess(response),
-    (response) => setUserState(response.user),
+    ({ user }) => setUserState(new Models.User(user)),
     (response) => invokeCallback(setItem('token', response.token)),
     (response) => showSuccessNotificationRequest(response.message),
     () => push('/'),

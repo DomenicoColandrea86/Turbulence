@@ -1,4 +1,3 @@
-import { v4 } from 'uuid';
 import { call, fork, put } from 'redux-saga/effects';
 import { takeEvery, delay } from 'redux-saga';
 
@@ -7,10 +6,9 @@ import { showNotification, hideNotification } from './actions';
 
 function* requestNotificationAsync(action) {
   try {
-    const notification = Object.assign({}, action.notification, { id: v4() });
-    yield put(showNotification(notification));
+    yield put(showNotification(action.notification));
     yield call(delay, 4100);
-    yield put(hideNotification(notification));
+    yield put(hideNotification(action.notification));
   } catch (error) {
     console.error(error); // eslint-disable-line no-console
   }

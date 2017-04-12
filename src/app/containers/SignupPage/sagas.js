@@ -4,6 +4,7 @@ import { fork } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 
 import api from '../../common/api';
+import Models from '../../common/models';
 import { signupSuccess, signupError } from './actions';
 import { SIGNUP_REQUEST } from './constants';
 import { setUserState } from '../App/actions';
@@ -16,7 +17,7 @@ const requestSignupAsync = createRequestSaga({
   cancel: REMOVE_LOGGED_USER,
   success: [
     (response) => signupSuccess(response),
-    (response) => setUserState(response.user),
+    ({ user }) => setUserState(new Models.User(user)),
     () => push('/account'),
   ],
   failure: [

@@ -1,16 +1,12 @@
 import { createSelector } from 'reselect';
 
-/**
- * Direct selector to the ResetPasswordPage state domain
- */
-function selectResetPasswordPageDomain(state) {
-  return state.resetPasswordPage;
-}
+const selectResetPasswordPageDomain = (state) => state.get('resetPasswordPage');
 
-/**
- * Public selectors used by ResetPasswordPage
- */
-export const selectResetPasswordPage = createSelector(
+const selectResetPasswordPage = createSelector(
   selectResetPasswordPageDomain,
   (substate) => substate
 );
+
+export {
+  selectResetPasswordPage,
+};

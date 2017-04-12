@@ -18,9 +18,10 @@ import {
 } from './actions';
 
 import api from '../../common/api';
+import Models from '../../common/models';
 import { invokeCallback } from '../../common/actions';
 import { createRequestSaga } from '../../common/sagas';
-import { selectNextPathname } from '../../common/selectors/router.selector';
+import { selectNextPathname } from '../../common/selectors/routes';
 import { removeItem } from '../../utils/localStorage';
 import { showErrorNotificationRequest } from '../Notifications/actions';
 import asyncNotificationWatchers from '../Notifications/sagas';
@@ -31,7 +32,7 @@ const requestAuthFromTokenAsync = createRequestSaga({
   cancel: REMOVE_LOGGED_USER,
   success: [
     (response) => authFromTokenSuccess(response),
-    (response) => setUserState(response.user),
+    ({ user }) => setUserState(new Models.User(user)),
     () => push(select(selectNextPathname) ? select(selectNextPathname) : '/'),
   ],
   failure: [
@@ -44,7 +45,7 @@ const requestLogoutAsync = createRequestSaga({
   request: api.user.logout,
   key: 'logout',
   success: [
-    () => setUserState(null),
+    () => setUserState(Models.User()),
     () => invokeCallback(removeItem('token')),
     () => push('/login'),
   ],

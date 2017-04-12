@@ -8,6 +8,7 @@ import {
 } from './constants';
 
 import api from '../../common/api';
+import Models from '../../common/models';
 import { invokeCallback } from '../../common/actions';
 import { loginError, loginSuccess } from './actions';
 import { setUserState } from '../../containers/App/actions';
@@ -22,7 +23,7 @@ const requestLoginAsync = createRequestSaga({
   cancel: REMOVE_LOGGED_USER,
   success: [
     (response) => loginSuccess(response),
-    (response) => setUserState(response.user),
+    ({ user }) => setUserState(new Models.User(user)),
     (response) => showSuccessNotificationRequest(response.message),
     (response) => invokeCallback(setItem('token', response.token)),
     () => push('/'),

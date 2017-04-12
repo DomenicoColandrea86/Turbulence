@@ -1,5 +1,6 @@
 import React from 'react';
 import * as styles from './styles.css';
+import Models from '../../common/models';
 
 const NotificationComponent = function NotificationComponent({ notification, close }) {
   const notificationClass = [
@@ -22,11 +23,7 @@ const NotificationComponent = function NotificationComponent({ notification, clo
 };
 
 NotificationComponent.propTypes = {
-  notification: React.PropTypes.shape({
-    id: React.PropTypes.string,
-    type: React.PropTypes.string,
-    message: React.PropTypes.string,
-  }),
+  notification: React.PropTypes.objectOf(Models.Notification).isRequired,
   close: React.PropTypes.func,
 };
 
