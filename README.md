@@ -1,7 +1,5 @@
 #TURBULENCE
 
-> To make honey, young bee need young flower, not old prune
-
 ## Quick start
 
 1. Run `yarn` to install dependencies.
